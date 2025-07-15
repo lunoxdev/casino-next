@@ -19,7 +19,7 @@ const Match = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <h1 className="text-3xl mb-4">PvP Battle</h1>
       <button
         onClick={handleSpin}

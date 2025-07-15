@@ -34,7 +34,7 @@ const Lobby = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       {registered ? (
         <>
           <h1 className="text-4xl mb-4">👋 Hi, {displayName}</h1>
