@@ -8,12 +8,14 @@ const Lobby = () => {
   const [registered, setRegistered] = useState(false);
   const [name, setName] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [playerList, setPlayerList] = useState([]);
   const [errorInput, setErrorInput] = useState(false);
+  const [playerList, setPlayerList] = useState([]);
+  const [canJoin, setCanJoin] = useState(false);
 
   useEffect(() => {
     socket.on("playersList", (players) => {
       setPlayerList(players);
+      setCanJoin(players.length === 2);
     });
 
     return () => {
@@ -42,12 +44,14 @@ const Lobby = () => {
               <li key={index}>{p}</li>
             ))}
           </ul>
-          <button
-            onClick={() => navigate("/match")}
-            className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition"
-          >
-            Create Match
-          </button>
+          {canJoin && (
+            <button
+              onClick={() => navigate("/match")}
+              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition"
+            >
+              Join Match
+            </button>
+          )}
         </>
       ) : (
         <>
