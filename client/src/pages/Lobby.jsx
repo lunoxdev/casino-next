@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePlayerStore } from "../stores/usePlayerStore";
 import socket from "../socket";
 import clsx from "clsx";
 
 const Lobby = () => {
   const navigate = useNavigate();
   const [registered, setRegistered] = useState(false);
-  const [name, setName] = useState("");
-  const [displayName, setDisplayName] = useState("");
+  const [inputName, setInputName] = useState("");
   const [errorInput, setErrorInput] = useState(false);
   const [playerList, setPlayerList] = useState([]);
   const [canJoin, setCanJoin] = useState(false);
+
+  const { name, setName } = usePlayerStore();
 
   useEffect(() => {
     socket.on("playersList", (players) => {
@@ -24,12 +26,13 @@ const Lobby = () => {
   }, []);
 
   const handleRegister = () => {
-    if (!name.trim()) {
+    if (!inputName.trim()) {
       setErrorInput(true);
       return;
     }
-    setDisplayName(name);
-    socket.emit("registerPlayer", name);
+
+    socket.emit("registerPlayer", inputName); // Send name to server
+    setName(inputName); // Save name in Zustand
     setRegistered(true);
   };
 
@@ -37,7 +40,7 @@ const Lobby = () => {
     <div className="flex flex-col items-center justify-center">
       {registered ? (
         <>
-          <h1 className="text-4xl mb-4">👋 Hi, {displayName}</h1>
+          <h1 className="text-4xl mb-4">👋 Hi, {name}</h1>
           <p className="italic font-bold">👥 Players Connected:</p>
           <ul className="list-disc pl-6 mb-4 text-gray-300">
             {playerList.map((p, index) => (
@@ -46,7 +49,9 @@ const Lobby = () => {
           </ul>
           {canJoin && (
             <button
-              onClick={() => navigate("/match")}
+              onClick={() => {
+                navigate("/match");
+              }}
               className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition"
             >
               Join Match
@@ -57,10 +62,9 @@ const Lobby = () => {
         <>
           <h1 className="text-4xl mb-2">Welcome to VIP Casino</h1>
           <input
-            required={true}
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={inputName}
+            onChange={(e) => setInputName(e.target.value)}
             placeholder={clsx(
               errorInput ? "Invalid nickname" : "Create your nickname"
             )}
