@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import socket from "../socket";
+import clsx from "clsx";
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const Lobby = () => {
   const [name, setName] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [playerList, setPlayerList] = useState([]);
+  const [errorInput, setErrorInput] = useState(false);
 
   useEffect(() => {
     socket.on("playersList", (players) => {
@@ -21,7 +23,7 @@ const Lobby = () => {
 
   const handleRegister = () => {
     if (!name.trim()) {
-      alert("Please enter a valid name.");
+      setErrorInput(true);
       return;
     }
     setDisplayName(name);
@@ -55,8 +57,12 @@ const Lobby = () => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Create your nickname"
-            className="px-4 py-2 rounded-md mb-4 border"
+            placeholder={clsx(
+              errorInput ? "Invalid nickname" : "Create your nickname"
+            )}
+            className={`px-4 py-2 rounded-md mb-4 border text-center ${
+              errorInput ? "border-red-500" : "border-gray-300"
+            }`}
           />
           <button
             onClick={handleRegister}
