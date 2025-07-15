@@ -1,9 +1,9 @@
 // Lobby sockets events
-const players = new Map();
+import { players } from "../state/playersStore.js";
 
 export default function lobbySockets(socket, io) {
   socket.on("registerPlayer", (name) => {
-    players.set(socket.id, { name });
+    players.set(socket.id, { name, balance: 1000 });
     console.log(`📝 Player "${name}" registered with ID ${socket.id}`);
 
     // Emit the list of all players to ALL connected clients
