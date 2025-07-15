@@ -12,9 +12,13 @@ const Lobby = () => {
   const [playerList, setPlayerList] = useState([]);
   const [canJoin, setCanJoin] = useState(false);
 
-  const { name, setName } = usePlayerStore();
+  const { name, setName, balance, setBalance } = usePlayerStore();
 
   useEffect(() => {
+    socket.on("welcome", ({ balance }) => {
+      setBalance(balance);
+    });
+
     socket.on("playersList", (players) => {
       setPlayerList(players);
       setCanJoin(players.length === 2);
@@ -23,7 +27,7 @@ const Lobby = () => {
     return () => {
       socket.off("playersList");
     };
-  }, []);
+  }, [setBalance]);
 
   const handleRegister = () => {
     if (!inputName.trim()) {
@@ -41,6 +45,7 @@ const Lobby = () => {
       {registered ? (
         <>
           <h1 className="text-4xl mb-4">👋 Hi, {name}</h1>
+          <p className="text-lg mb-2">Your balance: ${balance}</p>
           <p className="italic font-bold">👥 Players Connected:</p>
           <ul className="list-disc pl-6 mb-4 text-gray-300">
             {playerList.map((p, index) => (
