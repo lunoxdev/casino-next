@@ -8,10 +8,26 @@ export const usePlayerStore = create(
         name: "",
         balance: 0,
         registered: false,
-        setName: (name) => set({ name }),
-        setBalance: (newBalance) => set({ balance: newBalance }),
-        setRegistered: (registered) => set({ registered }),
-        reset: () => set({ name: "", balance: 0, registered: false }),
+        token: "", // <-- Temporary token for the session
+
+        register: (name) => {
+          const fakeToken = Math.random().toString(36).substring(2);
+          set({
+            name,
+            balance: 1000,
+            registered: true,
+            token: fakeToken,
+          });
+        },
+
+        disconnect: () => {
+          set({
+            name: "",
+            balance: 0,
+            registered: false,
+            token: "",
+          });
+        },
       }),
       {
         name: "player-storage", // name of the item in the storage (must be unique)

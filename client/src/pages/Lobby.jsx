@@ -1,65 +1,30 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../stores/usePlayerStore";
+import SignUp from "../components/SignUp";
 import socket from "../socket";
-import clsx from "clsx";
 
 const Lobby = () => {
-  const navigate = useNavigate();
-  const [inputName, setInputName] = useState("");
-  const [errorInput, setErrorInput] = useState(false);
-  const [playerList, setPlayerList] = useState([]);
-  const [canJoin, setCanJoin] = useState(false);
+  const { name, balance, registered, disconnect } = usePlayerStore();
+  const [players, setPlayers] = useState([]);
 
-  const {
-    name,
-    setName,
-    balance,
-    setBalance,
-    registered,
-    setRegistered,
-    reset,
-  } = usePlayerStore();
-
-  // Listen for welcome event to set balance and registered state
   useEffect(() => {
-    socket.on("welcome", ({ balance }) => {
-      setBalance(balance);
+    socket.on("updatePlayers", (updatedList) => {
+      setPlayers(updatedList);
     });
-
-    socket.on("playersList", (players) => {
-      setPlayerList(players);
-      setCanJoin(players.length === 2);
-    });
-
     return () => {
-      socket.off("playersList");
+      socket.off("updatePlayers");
     };
-  }, [setBalance]);
+  }, []);
 
-  const handleRegister = () => {
-    if (!inputName.trim()) {
-      setErrorInput(true);
-      return;
+  useEffect(() => {
+    if (registered) {
+      socket.emit("playerJoined", { name, balance });
     }
-
-    socket.emit("registerPlayer", inputName); // Send name to server
-    setName(inputName); // Save name in Zustand
-    setRegistered(true);
-    console.log(`🟢 Player ${inputName} registered`);
-  };
+  }, [registered, name, balance]);
 
   const handleDisconnect = () => {
-    reset(); // Reset the player store
-    setInputName("");
-    socket.disconnect(); // Notify server of disconnection
-    console.log(`🔴 Player ${name} disconnected`);
-    navigate("/"); // Redirect to Lobby
-
-    // 🔄 Reconnect the socket after a short delay
-    setTimeout(() => {
-      socket.connect();
-    }, 300);
+    socket.emit("playerDisconnected", name); // Disconnect player from server
+    disconnect(); // Reset player state in Zustand
   };
 
   return (
@@ -68,47 +33,25 @@ const Lobby = () => {
         <>
           <h1 className="text-4xl mb-4">👋 Hi, {name}</h1>
           <p className="text-lg mb-2">Your balance: ${balance}</p>
-          <p className="italic font-bold">👥 Players Connected:</p>
-          <ul className="list-disc pl-6 mb-4 text-gray-300">
-            {playerList.map((p, index) => (
-              <li key={index}>{p}</li>
+
+          <p className="italic font-bold mt-4">👥 Players Connected:</p>
+          <ul className="mb-4">
+            {players.map((player, index) => (
+              <li key={index}>
+                {player.name} 💰 ${player.balance}
+              </li>
             ))}
           </ul>
-          {canJoin && (
-            <button
-              onClick={() => {
-                navigate("/match");
-              }}
-              className="bg-cyan-600 px-4 py-1 mb-2 rounded hover:bg-cyan-700 transition"
-            >
-              Join Match
-            </button>
-          )}
-          <button onClick={handleDisconnect} className="hover:underline">
+
+          <button
+            onClick={handleDisconnect}
+            className="bg-red-700 px-4 py-1 rounded hover:bg-red-800 transition mb-4"
+          >
             Disconnect
           </button>
         </>
       ) : (
-        <>
-          <h1 className="text-4xl mb-2">Welcome to VIP Casino</h1>
-          <input
-            type="text"
-            value={inputName}
-            onChange={(e) => setInputName(e.target.value)}
-            placeholder={clsx(
-              errorInput ? "Invalid nickname" : "Create your nickname"
-            )}
-            className={`px-4 py-2 rounded-md mb-4 border text-center ${
-              errorInput ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <button
-            onClick={handleRegister}
-            className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mb-4"
-          >
-            Register
-          </button>
-        </>
+        <SignUp />
       )}
     </div>
   );
