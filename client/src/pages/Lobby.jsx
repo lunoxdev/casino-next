@@ -72,7 +72,7 @@ const Lobby = () => {
 
           <button
             onClick={handleSignOut}
-            className="bg-red-700 px-4 py-1 rounded hover:bg-red-800 transition mb-4"
+            className="text-rose-600 px-4 py-1 rounded hover:underline transition mb-4"
           >
             Sign Out
           </button>
