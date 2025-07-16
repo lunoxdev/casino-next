@@ -52,11 +52,9 @@ const Lobby = () => {
           <p className="text-lg mb-2">Your balance: ${balance}</p>
 
           <p className="italic font-bold mt-4">👥 Players Connected:</p>
-          <ul className="mb-4">
+          <ul className="mb-4 text-green-500">
             {players.map((player, index) => (
-              <li key={index}>
-                {player.name} 💰 ${player.balance}
-              </li>
+              <li key={index}>{player.name}</li>
             ))}
           </ul>
 
@@ -72,7 +70,7 @@ const Lobby = () => {
 
           <button
             onClick={handleSignOut}
-            className="text-rose-600 px-4 py-1 rounded hover:underline transition mb-4"
+            className="text-red-600 px-4 py-1 rounded hover:underline transition mb-4"
           >
             Sign Out
           </button>
