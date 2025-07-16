@@ -5,16 +5,12 @@ import matchSockets from "./match.js";
 
 export default function manejarSockets(io) {
   io.on("connection", (socket) => {
-    console.log("🎮 Player connected:", socket.id);
+    console.log(`🟢 Player with socket ID: ${socket.id} connected`);
 
     // Ejecute lobby sockets
     lobbySockets(socket, io);
 
     // Ejecute match sockets
     matchSockets(socket, io);
-
-    socket.on("disconnect", () => {
-      console.log("🚪 Player disconnected:", socket.id);
-    });
   });
 }

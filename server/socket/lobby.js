@@ -10,15 +10,16 @@ export default function lobbySockets(socket, io) {
     socket.emit("welcome", me);
     console.log(`📝 Player "${name}" registered with ${me.balance} balance`);
 
-    // Emit the list of all players to ALL connected clients
+    // Add player to the list
     const list = Array.from(players.values()).map((p) => p.name);
     io.emit("playersList", list);
   });
 
   socket.on("disconnect", () => {
     players.delete(socket.id);
+    console.log(`🔴 Player with socket ID ${socket.id} disconnected`);
 
-    // Emit updated list when someone disconnects
+    // Remove player from the list
     const list = Array.from(players.values()).map((p) => p.name);
     io.emit("playersList", list);
   });

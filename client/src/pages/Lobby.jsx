@@ -6,14 +6,22 @@ import clsx from "clsx";
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const [registered, setRegistered] = useState(false);
   const [inputName, setInputName] = useState("");
   const [errorInput, setErrorInput] = useState(false);
   const [playerList, setPlayerList] = useState([]);
   const [canJoin, setCanJoin] = useState(false);
 
-  const { name, setName, balance, setBalance } = usePlayerStore();
+  const {
+    name,
+    setName,
+    balance,
+    setBalance,
+    registered,
+    setRegistered,
+    reset,
+  } = usePlayerStore();
 
+  // Listen for welcome event to set balance and registered state
   useEffect(() => {
     socket.on("welcome", ({ balance }) => {
       setBalance(balance);
@@ -38,6 +46,20 @@ const Lobby = () => {
     socket.emit("registerPlayer", inputName); // Send name to server
     setName(inputName); // Save name in Zustand
     setRegistered(true);
+    console.log(`🟢 Player ${inputName} registered`);
+  };
+
+  const handleDisconnect = () => {
+    reset(); // Reset the player store
+    setInputName("");
+    socket.disconnect(); // Notify server of disconnection
+    console.log(`🔴 Player ${name} disconnected`);
+    navigate("/"); // Redirect to Lobby
+
+    // 🔄 Reconnect the socket after a short delay
+    setTimeout(() => {
+      socket.connect();
+    }, 300);
   };
 
   return (
@@ -57,11 +79,14 @@ const Lobby = () => {
               onClick={() => {
                 navigate("/match");
               }}
-              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition"
+              className="bg-cyan-600 px-4 py-1 mb-2 rounded hover:bg-cyan-700 transition"
             >
               Join Match
             </button>
           )}
+          <button onClick={handleDisconnect} className="hover:underline">
+            Disconnect
+          </button>
         </>
       ) : (
         <>
