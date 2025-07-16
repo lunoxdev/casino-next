@@ -5,13 +5,14 @@ import socket from "../socket";
 const Match = () => {
   const [result, setResult] = useState("");
   const [players, setPlayers] = useState([]);
-  const { balance, setBalance } = usePlayerStore();
+
+  const { name, balance, setBalance } = usePlayerStore();
 
   useEffect(() => {
-    socket.emit("startMatch"); // Notify server to start match
+    socket.emit("startMatch");
 
     socket.on("matchPlayers", (list) => {
-      setPlayers(list); // List of players
+      setPlayers(list); // [{ name, balance }]
     });
 
     socket.on("spinResult", ({ message, newBalance }) => {
@@ -34,14 +35,15 @@ const Match = () => {
       <h1 className="text-3xl mb-4">PvP Battle</h1>
 
       <ul className="mb-4 text-gray-300">
-        {players.map((p, index) => (
-          <li key={index}>
-            👤 {p.name} – 💰 ${p.balance}
-          </li>
-        ))}
+        {players.map((p, index) => {
+          const isCurrentPlayer = p.name === name;
+          return (
+            <li key={index}>
+              👤 {p.name} – 💰 ${isCurrentPlayer ? balance : p.balance}
+            </li>
+          );
+        })}
       </ul>
-
-      <p className="mb-4 text-xl">Your Balance: ${balance}</p>
 
       <button
         onClick={handleSpin}
