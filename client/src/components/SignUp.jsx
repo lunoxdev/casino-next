@@ -20,7 +20,7 @@ export default function SignUp() {
         value={inputName}
         onChange={(e) => setInputName(e.target.value)}
         placeholder="Enter your name"
-        className="border p-2 mb-4"
+        className="border p-2 mb-4 rounded-md text-center"
       />
       <button
         onClick={handleRegister}
