@@ -6,19 +6,19 @@ import {
 
 export default function lobbySockets(socket, io) {
   socket.on("playerJoined", (playerData) => {
-    addPlayer(socket.id, playerData);
+    const { token } = playerData;
+    if (!token) return;
+
+    addPlayer(token, playerData);
     io.emit("updatePlayers", getPlayersList());
+    console.log(`🟢 Player ${playerData.name} has joined`);
   });
 
-  socket.on("signOut", () => {
-    removePlayer(socket.id);
+  socket.on("signOut", (token) => {
+    if (!token) return;
+
+    removePlayer(token);
     io.emit("updatePlayers", getPlayersList());
     console.log(`🔴 Player has signed out`);
-  });
-
-  socket.on("disconnect", () => {
-    removePlayer(socket.id);
-    io.emit("updatePlayers", getPlayersList());
-    console.log(`📡 Connection closed (network lost or switched).`);
   });
 }

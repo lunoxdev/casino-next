@@ -3,12 +3,12 @@
 // Change this to save player data in a database like MySQL
 export const players = new Map();
 
-export const addPlayer = (id, playerData) => {
-  players.set(id, playerData);
+export const addPlayer = (token, playerData) => {
+  players.set(token, playerData);
 };
 
-export const removePlayer = (id) => {
-  players.delete(id);
+export const removePlayer = (token) => {
+  players.delete(token);
 };
 
 export const getPlayersList = () => {

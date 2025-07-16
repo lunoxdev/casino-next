@@ -6,27 +6,32 @@ import socket from "../socket";
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const { name, balance, registered, signOut } = usePlayerStore();
+  const { name, balance, registered, token, signOut } = usePlayerStore();
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
+    const rejoin = () => {
+      if (registered && token) {
+        socket.emit("playerJoined", { name, balance, token });
+      }
+    };
+
+    socket.on("connect", rejoin);
+    rejoin(); // also on first mount
+
     socket.on("updatePlayers", (updatedList) => {
       setPlayers(updatedList);
     });
+
     return () => {
+      socket.off("connect", rejoin);
       socket.off("updatePlayers");
     };
-  }, []);
-
-  useEffect(() => {
-    if (registered) {
-      socket.emit("playerJoined", { name, balance });
-    }
-  }, [registered, name, balance]);
+  }, [registered, name, balance, token]);
 
   const handleSignOut = () => {
-    socket.emit("signOut", name); // Logout player from server
-    signOut(); // Reset player state in Zustand
+    socket.emit("signOut", token); // Notify server to remove player
+    signOut(); // Zustand cleanup
   };
 
   const handleStartMatch = () => {
