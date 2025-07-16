@@ -10,8 +10,15 @@ export default function lobbySockets(socket, io) {
     io.emit("updatePlayers", getPlayersList());
   });
 
-  socket.on("playerDisconnected", () => {
+  socket.on("signOut", () => {
     removePlayer(socket.id);
     io.emit("updatePlayers", getPlayersList());
+    console.log(`🔴 Player has signed out`);
+  });
+
+  socket.on("disconnect", () => {
+    removePlayer(socket.id);
+    io.emit("updatePlayers", getPlayersList());
+    console.log(`📡 Connection closed (network lost or switched).`);
   });
 }

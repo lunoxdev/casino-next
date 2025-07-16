@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import SignUp from "../components/SignUp";
 import socket from "../socket";
 
 const Lobby = () => {
-  const { name, balance, registered, disconnect } = usePlayerStore();
+  const navigate = useNavigate();
+  const { name, balance, registered, signOut } = usePlayerStore();
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -22,9 +24,13 @@ const Lobby = () => {
     }
   }, [registered, name, balance]);
 
-  const handleDisconnect = () => {
-    socket.emit("playerDisconnected", name); // Disconnect player from server
-    disconnect(); // Reset player state in Zustand
+  const handleSignOut = () => {
+    socket.emit("signOut", name); // Logout player from server
+    signOut(); // Reset player state in Zustand
+  };
+
+  const handleStartMatch = () => {
+    navigate("/match");
   };
 
   return (
@@ -43,11 +49,21 @@ const Lobby = () => {
             ))}
           </ul>
 
+          {/*show Start Match button if there are two players*/}
+          {players.length === 2 && (
+            <button
+              onClick={handleStartMatch}
+              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mb-4"
+            >
+              Start Match
+            </button>
+          )}
+
           <button
-            onClick={handleDisconnect}
+            onClick={handleSignOut}
             className="bg-red-700 px-4 py-1 rounded hover:bg-red-800 transition mb-4"
           >
-            Disconnect
+            Sign Out
           </button>
         </>
       ) : (

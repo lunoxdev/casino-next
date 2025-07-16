@@ -20,7 +20,7 @@ export const usePlayerStore = create(
           });
         },
 
-        disconnect: () => {
+        signOut: () => {
           set({
             name: "",
             balance: 0,
