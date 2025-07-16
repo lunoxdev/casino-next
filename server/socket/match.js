@@ -12,11 +12,11 @@ export default function matchSockets(socket) {
 
     let result, amount;
     if (Math.random() < 0.5) {
-      result = "🎉 You win $100!";
-      amount = 100;
+      amount = Math.floor(Math.random() * 100) + 1;
+      result = `🎉 You win ${amount}!`;
     } else {
-      result = "💀 You lose $100!";
-      amount = -100;
+      amount = -1 * (Math.floor(Math.random() * 100) + 1);
+      result = `💀 You lose ${Math.abs(amount)}!`;
     }
 
     player.balance += amount; // Update player's balance in backend
@@ -25,5 +25,10 @@ export default function matchSockets(socket) {
       message: result,
       newBalance: player.balance,
     });
+
+    // Emit updated player list to all players
+    const playersList = Array.from(players.values());
+    socket.broadcast.emit("matchPlayers", playersList);
+    socket.emit("matchPlayers", playersList);
   });
 }
