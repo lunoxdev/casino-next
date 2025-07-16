@@ -11,7 +11,7 @@ export const usePlayerStore = create(
         setName: (name) => set({ name }),
         setBalance: (newBalance) => set({ balance: newBalance }),
         setRegistered: (registered) => set({ registered }),
-        reset: () => set({ name: "", registered: false }),
+        reset: () => set({ name: "", balance: 0, registered: false }),
       }),
       {
         name: "player-storage", // name of the item in the storage (must be unique)
