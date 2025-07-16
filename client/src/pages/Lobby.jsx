@@ -6,7 +6,8 @@ import socket from "../socket";
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const { name, balance, registered, token, signOut } = usePlayerStore();
+  const { name, balance, setBalance, registered, token, signOut } =
+    usePlayerStore();
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -21,13 +22,18 @@ const Lobby = () => {
 
     socket.on("updatePlayers", (updatedList) => {
       setPlayers(updatedList);
+
+      const currentPlayer = updatedList.find((p) => p.token === token);
+      if (currentPlayer) {
+        setBalance(currentPlayer.balance);
+      }
     });
 
     return () => {
       socket.off("connect", rejoin);
       socket.off("updatePlayers");
     };
-  }, [registered, name, balance, token]);
+  }, [registered, name, balance, setBalance, token]);
 
   const handleSignOut = () => {
     socket.emit("signOut", token); // Notify server to remove player

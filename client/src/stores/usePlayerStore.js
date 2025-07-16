@@ -10,6 +10,7 @@ export const usePlayerStore = create(
         registered: false,
         token: "", // <-- Temporary token for the session
 
+        setBalance: (newBalance) => set({ balance: newBalance }),
         register: (name) => {
           const fakeToken = Math.random().toString(36).substring(2);
           set({

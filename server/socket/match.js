@@ -1,34 +1,34 @@
 import { players } from "../state/playersStore.js";
 
-export default function matchSockets(socket) {
+export default function matchSockets(socket, io) {
   socket.on("startMatch", () => {
-    const playersList = Array.from(players.values());
-    socket.emit("matchPlayers", playersList); // Only emit to the player who started the match
+    // Emit player list to all players
+    const list = Array.from(players.values());
+    socket.emit("matchPlayers", list);
   });
 
-  socket.on("spin", () => {
-    const player = players.get(socket.id);
+  socket.on("spin", ({ token }) => {
+    const player = players.get(token);
     if (!player) return;
 
-    let result, amount;
-    if (Math.random() < 0.5) {
-      amount = Math.floor(Math.random() * 100) + 1;
-      result = `🎉 You win ${amount}!`;
-    } else {
-      amount = -1 * (Math.floor(Math.random() * 100) + 1);
-      result = `💀 You lose ${Math.abs(amount)}!`;
-    }
+    const win = Math.random() < 0.5;
+    const amount = Math.floor(Math.random() * 100) + 1;
+    const delta = win ? amount : -amount;
 
-    player.balance += amount; // Update player's balance in backend
+    player.balance += delta;
+    players.set(token, player);
 
+    const resultText = win
+      ? `🎉 You won $${amount}!`
+      : `💀 You lost $${amount}.`;
+
+    // Emit result individually to the player
     socket.emit("spinResult", {
-      message: result,
-      newBalance: player.balance,
+      message: resultText,
+      balance: player.balance,
     });
 
     // Emit updated player list to all players
-    const playersList = Array.from(players.values());
-    socket.broadcast.emit("matchPlayers", playersList);
-    socket.emit("matchPlayers", playersList);
+    io.emit("matchPlayers", Array.from(players.values()));
   });
 }

@@ -3,31 +3,34 @@ import { usePlayerStore } from "../stores/usePlayerStore";
 import socket from "../socket";
 
 const Match = () => {
-  const [result, setResult] = useState("");
+  const { name, balance, setBalance, token, registered } = usePlayerStore();
   const [players, setPlayers] = useState([]);
-
-  const { name, balance, setBalance } = usePlayerStore();
+  const [resultText, setResultText] = useState("");
 
   useEffect(() => {
-    socket.emit("startMatch");
+    if (registered && token) {
+      socket.emit("startMatch");
+
+      socket.emit("playerJoined", { name, balance, token }); // In case the player reload
+    }
 
     socket.on("matchPlayers", (list) => {
-      setPlayers(list); // [{ name, balance }]
+      setPlayers(list);
     });
 
-    socket.on("spinResult", ({ message, newBalance }) => {
-      setResult(message);
-      setBalance(newBalance);
+    socket.on("spinResult", ({ message }) => {
+      setResultText(message);
+      setBalance(balance);
     });
 
     return () => {
-      socket.off("spinResult");
       socket.off("matchPlayers");
+      socket.off("spinResult");
     };
-  }, [setBalance]);
+  }, [registered, token, name, balance, setBalance]);
 
   const handleSpin = () => {
-    socket.emit("spin");
+    socket.emit("spin", { token });
   };
 
   return (
@@ -35,14 +38,11 @@ const Match = () => {
       <h1 className="text-3xl mb-4">PvP Battle</h1>
 
       <ul className="mb-4 text-gray-300">
-        {players.map((p, index) => {
-          const isCurrentPlayer = p.name === name;
-          return (
-            <li key={index}>
-              👤 {p.name} – 💰 ${isCurrentPlayer ? balance : p.balance}
-            </li>
-          );
-        })}
+        {players.map((player, index) => (
+          <li key={index}>
+            {player.name} 💰 ${player.balance}
+          </li>
+        ))}
       </ul>
 
       <button
@@ -52,7 +52,7 @@ const Match = () => {
         🎰 Spin
       </button>
 
-      <p className="mt-5 text-xl">{result}</p>
+      {resultText && <p className="mt-4 text-lg">{resultText}</p>}
     </div>
   );
 };
