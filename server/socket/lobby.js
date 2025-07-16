@@ -10,13 +10,8 @@ export default function lobbySockets(socket, io) {
     io.emit("updatePlayers", getPlayersList());
   });
 
-  socket.on("playerDisconnected", (playerName) => {
+  socket.on("playerDisconnected", () => {
     removePlayer(socket.id); // Puedes agregar lógica extra si el nombre importa
-    io.emit("updatePlayers", getPlayersList());
-  });
-
-  socket.on("disconnect", () => {
-    removePlayer(socket.id);
     io.emit("updatePlayers", getPlayersList());
   });
 }
