@@ -16,7 +16,7 @@ const Lobby = () => {
       }
     };
 
-    socket.on("connect", rejoin);
+    socket.on("connection", rejoin);
     rejoin(); // also on first mount
 
     socket.on("updatePlayers", (updatedList) => {
@@ -24,7 +24,7 @@ const Lobby = () => {
     });
 
     return () => {
-      socket.off("connect", rejoin);
+      socket.off("connection", rejoin);
       socket.off("updatePlayers");
     };
   }, [registered, name, balance, token]);
