@@ -9,9 +9,13 @@ export default function lobbySockets(socket, io) {
     const { token } = playerData;
     if (!token) return;
 
-    addPlayer(token, playerData);
+    const alreadyConnected = getPlayersList().some((p) => p.token === token);
+    if (!alreadyConnected) {
+      addPlayer(token, playerData);
+      console.log(`🟢 Player ${playerData.name} has joined`);
+    }
+
     io.emit("updatePlayers", getPlayersList());
-    console.log(`🟢 Player ${playerData.name} has joined`);
   });
 
   socket.on("signOut", (token) => {
