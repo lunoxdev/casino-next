@@ -48,7 +48,12 @@ const Lobby = () => {
     <div className="flex flex-col items-center justify-center">
       {registered ? (
         <>
-          <h1 className="text-4xl mb-4">👋 Hi, {name}</h1>
+          <h1 className="text-4xl mb-4">
+            Hi,{" "}
+            <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
+              {name}
+            </span>
+          </h1>
           <p className="text-lg mb-2">Your balance: ${balance}</p>
 
           <p className="italic font-bold mt-4">👥 Players Connected:</p>
