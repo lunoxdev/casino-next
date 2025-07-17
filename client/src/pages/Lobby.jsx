@@ -49,7 +49,7 @@ const Lobby = () => {
       {registered ? (
         <>
           <h1 className="text-4xl mb-4">
-            Hi,{" "}
+            Hi,
             <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
               {name}
             </span>
