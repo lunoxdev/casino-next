@@ -35,7 +35,12 @@ const Match = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1 className="text-3xl mb-4">PvP Battle</h1>
+      <h1 className="text-3xl mb-4">
+        PvP{" "}
+        <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
+          Battle
+        </span>
+      </h1>
 
       <ul className="mb-4 text-gray-300">
         {players.map((player, index) => (
