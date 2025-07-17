@@ -15,7 +15,7 @@ export default function SignUp() {
   return (
     <>
       <h1 className="text-4xl mb-4">
-        Welcome to
+        Welcome to{" "}
         <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
           VIP Casino
         </span>
