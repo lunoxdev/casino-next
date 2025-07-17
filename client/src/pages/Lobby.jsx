@@ -62,7 +62,7 @@ const Lobby = () => {
           {players.length === 2 && (
             <button
               onClick={handleStartMatch}
-              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mb-4"
+              className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4"
             >
               Start Match
             </button>
