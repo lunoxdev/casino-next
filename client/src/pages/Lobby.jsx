@@ -48,16 +48,21 @@ const Lobby = () => {
     <div className="flex flex-col items-center justify-center">
       {registered ? (
         <>
-          <h1 className="text-4xl mb-4">
+          <h1 className="text-4xl mb-2">
             Hi,{" "}
             <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
               {name}
             </span>
           </h1>
-          <p className="text-lg mb-2">Your balance: ${balance}</p>
+          <p className="text-lg mb-6">
+            Your balance:{" "}
+            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 inline-block text-transparent bg-clip-text font-semibold">
+              ${balance}
+            </span>
+          </p>
 
-          <p className="italic font-bold mt-4">👥 Players Connected:</p>
-          <ul className="mb-4 text-green-500">
+          <p>Players Connected:</p>
+          <ul className="mb-2 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
             {players.map((player, index) => (
               <li key={index}>{player.name}</li>
             ))}
@@ -67,7 +72,7 @@ const Lobby = () => {
           {players.length === 2 && (
             <button
               onClick={handleStartMatch}
-              className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4"
+              className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-6"
             >
               Start Match
             </button>
