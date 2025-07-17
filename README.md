@@ -1,6 +1,6 @@
 # 🎰 PvP CASINO
 
-A real PvP casino battle experience using slots games from providers.
+A real PvP casino battle experience using slots games.
 
 ## 🚀 Running Locally
 
