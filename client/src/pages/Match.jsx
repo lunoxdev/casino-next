@@ -47,9 +47,9 @@ const Match = () => {
 
       <button
         onClick={handleSpin}
-        className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-6 py-1 rounded transition"
+        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-80 px-6 py-1 rounded transition font-bold"
       >
-        🎰 Spin
+        🎰 SPIN
       </button>
 
       {resultText && <p className="mt-4 text-lg">{resultText}</p>}
