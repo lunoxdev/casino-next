@@ -3,9 +3,16 @@ import {
   removePlayer,
   getPlayersList,
 } from "../state/playersStore.js";
+import {
+  createRoom,
+  getRoomPlayers,
+  getAllRooms,
+  matchRooms,
+} from "../state/matchRooms.js";
 
 export default function lobbySockets(socket, io) {
   socket.on("playerJoined", (playerData) => {
+    // ⚠️ Change this when Auth is implemented
     const { token } = playerData;
     if (!token) return;
 
@@ -15,7 +22,8 @@ export default function lobbySockets(socket, io) {
       console.log(`🟢 Player ${playerData.name} has joined`);
     }
 
-    io.emit("updatePlayers", getPlayersList());
+    io.emit("updatePlayers", getPlayersList()); // ⬅️ broadcast for all players in lobby
+    io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
   socket.on("signOut", (token) => {
@@ -24,5 +32,33 @@ export default function lobbySockets(socket, io) {
     removePlayer(token);
     io.emit("updatePlayers", getPlayersList());
     console.log(`🔴 Player has signed out`);
+  });
+
+  socket.on("createRoom", ({ roomId, name, balance }) => {
+    const player = { name, balance };
+    createRoom(roomId, player);
+
+    socket.join(roomId);
+    socket.emit("roomCreated", { roomId, player });
+    io.to(roomId).emit("matchPlayers", getRoomPlayers(roomId)); // ⬅️ broadcast for players in room
+    io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
+  });
+
+  socket.on("getRooms", () => {
+    socket.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
+  });
+
+  socket.on("joinRoom", ({ roomId, name, balance }) => {
+    const room = matchRooms.get(roomId);
+    if (!room || room.players.length >= 2) return;
+
+    const newPlayer = { name, balance };
+    room.players.push(newPlayer);
+    matchRooms.set(roomId, room);
+
+    socket.join(roomId);
+
+    io.to(roomId).emit("matchPlayers", room.players); // ⬅️ broadcast for players in room
+    io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 }

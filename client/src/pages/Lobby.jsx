@@ -1,47 +1,99 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../stores/usePlayerStore";
+import { useRoomsStore } from "../stores/useRoomsStore";
 import SignUp from "../components/SignUp";
 import socket from "../socket";
 
 const Lobby = () => {
-  const navigate = useNavigate();
   const { name, balance, setBalance, registered, token, signOut } =
     usePlayerStore();
+  const {
+    myRoom,
+    availableRooms,
+    setMyRoom,
+    setRoomId,
+    setRoomPlayers,
+    setAvailableRooms,
+    clearRoom,
+  } = useRoomsStore();
+
   const [players, setPlayers] = useState([]);
+
+  const { roomId, roomPlayers } = myRoom;
 
   useEffect(() => {
     const rejoin = () => {
       if (registered && token) {
         socket.emit("playerJoined", { name, balance, token });
+        socket.emit("getRooms");
       }
     };
 
     socket.on("connect", rejoin);
-    rejoin(); // also on first mount
+    rejoin();
 
     socket.on("updatePlayers", (updatedList) => {
       setPlayers(updatedList);
 
       const currentPlayer = updatedList.find((p) => p.token === token);
-      if (currentPlayer) {
-        setBalance(currentPlayer.balance);
-      }
+      if (currentPlayer) setBalance(currentPlayer.balance);
+    });
+
+    socket.on("roomCreated", ({ roomId, player }) => {
+      setMyRoom(roomId, [player]);
+    });
+
+    socket.on("roomListUpdated", (rooms) => {
+      setAvailableRooms(rooms);
+    });
+
+    socket.on("matchPlayers", (playersInRoom) => {
+      setRoomPlayers(playersInRoom);
     });
 
     return () => {
       socket.off("connect", rejoin);
       socket.off("updatePlayers");
+      socket.off("roomCreated");
+      socket.off("roomListUpdated");
+      socket.off("matchPlayers");
+      socket.off("roomJoined");
     };
-  }, [registered, name, balance, setBalance, token]);
+  }, [
+    registered,
+    token,
+    name,
+    balance,
+    setBalance,
+    setMyRoom,
+    setRoomPlayers,
+    setAvailableRooms,
+  ]);
 
   const handleSignOut = () => {
     socket.emit("signOut", token); // Notify server to remove player
     signOut(); // Zustand cleanup
+    clearRoom();
   };
 
-  const handleStartMatch = () => {
-    navigate("/match");
+  const handleCreateRoom = () => {
+    const newRoomId = crypto.randomUUID();
+    setRoomId(newRoomId);
+
+    socket.emit("createRoom", {
+      roomId: newRoomId,
+      name,
+      balance,
+    });
+  };
+
+  const handleJoin = () => {
+    socket.emit("joinRoom", {
+      roomId: roomId,
+      name,
+      balance,
+    });
+    setRoomId(null);
   };
 
   return (
@@ -68,15 +120,46 @@ const Lobby = () => {
             ))}
           </ul>
 
-          {/*show Start Match button if there are two players*/}
-          {players.length === 2 && (
-            <button
-              onClick={handleStartMatch}
-              className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-6"
-            >
-              Start Match
-            </button>
+          {availableRooms.length > 0 && (
+            <>
+              <p>Available Rooms:</p>
+              <ul>
+                {availableRooms.map((room, index) => (
+                  <li key={index}>
+                    Room: {room.roomId} — Host: {room.host.name}
+                    <br />
+                    {/* Solo mostrar el botón si el jugador NO es el host y si ya hay 2 jugadores, no motrarlo */}
+                    {room.host.name !== name &&
+                      !room.players.some((p) => p.name === name) && (
+                        <button onClick={handleJoin}>Join</button>
+                      )}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
+
+          <br />
+
+          {roomId && (
+            <>
+              <p>Players in Room:</p>
+              <p>Room ID: {roomId}</p>
+              <ul>
+                {roomPlayers.map((p, index) => (
+                  <li key={index}>
+                    {p.name} — ${p.balance}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          <br />
+
+          <button onClick={handleCreateRoom}>Create Room</button>
+
+          <br />
 
           <button
             onClick={handleSignOut}
