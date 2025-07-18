@@ -74,6 +74,7 @@ const Lobby = () => {
     socket.emit("signOut", token); // Notify server to remove player
     signOut(); // Zustand cleanup
     clearRoom();
+    setRoomId(null);
   };
 
   const handleCreateRoom = () => {
@@ -87,13 +88,13 @@ const Lobby = () => {
     });
   };
 
-  const handleJoin = () => {
+  const handleJoin = (roomIdToJoin) => {
     socket.emit("joinRoom", {
-      roomId: roomId,
+      roomId: roomIdToJoin,
       name,
       balance,
     });
-    setRoomId(null);
+    setRoomId(roomIdToJoin);
   };
 
   return (
@@ -131,7 +132,9 @@ const Lobby = () => {
                     {/* Solo mostrar el botón si el jugador NO es el host y si ya hay 2 jugadores, no motrarlo */}
                     {room.host.name !== name &&
                       !room.players.some((p) => p.name === name) && (
-                        <button onClick={handleJoin}>Join</button>
+                        <button onClick={() => handleJoin(room.roomId)}>
+                          Join
+                        </button>
                       )}
                   </li>
                 ))}
