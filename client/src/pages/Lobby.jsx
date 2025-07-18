@@ -1,74 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { useRoomsStore } from "../stores/useRoomsStore";
+import { useLobbySocket } from "../hooks/useLobbySocket";
 import SignUp from "../components/SignUp";
 import socket from "../socket";
 
 const Lobby = () => {
-  const { name, balance, setBalance, registered, token, signOut } =
-    usePlayerStore();
-  const {
-    myRoom,
-    availableRooms,
-    setMyRoom,
-    setRoomId,
-    setRoomPlayers,
-    setAvailableRooms,
-    clearRoom,
-  } = useRoomsStore();
+  const { name, balance, registered, token, signOut } = usePlayerStore();
+  const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
 
   const [players, setPlayers] = useState([]);
 
   const { roomId, roomPlayers } = myRoom;
 
-  useEffect(() => {
-    const rejoin = () => {
-      if (registered && token) {
-        socket.emit("playerJoined", { name, balance, token });
-        socket.emit("getRooms");
-      }
-    };
-
-    socket.on("connect", rejoin);
-    rejoin();
-
-    socket.on("updatePlayers", (updatedList) => {
-      setPlayers(updatedList);
-
-      const currentPlayer = updatedList.find((p) => p.token === token);
-      if (currentPlayer) setBalance(currentPlayer.balance);
-    });
-
-    socket.on("roomCreated", ({ roomId, player }) => {
-      setMyRoom(roomId, [player]);
-    });
-
-    socket.on("roomListUpdated", (rooms) => {
-      setAvailableRooms(rooms);
-    });
-
-    socket.on("matchPlayers", (playersInRoom) => {
-      setRoomPlayers(playersInRoom);
-    });
-
-    return () => {
-      socket.off("connect", rejoin);
-      socket.off("updatePlayers");
-      socket.off("roomCreated");
-      socket.off("roomListUpdated");
-      socket.off("matchPlayers");
-      socket.off("roomJoined");
-    };
-  }, [
-    registered,
-    token,
-    name,
-    balance,
-    setBalance,
-    setMyRoom,
-    setRoomPlayers,
-    setAvailableRooms,
-  ]);
+  useLobbySocket({ setPlayers }); // ⬅️ Socket hook for lobby events
 
   const handleSignOut = () => {
     socket.emit("signOut", token); // Notify server to remove player
@@ -129,7 +74,8 @@ const Lobby = () => {
                   <li key={index}>
                     Room: {room.roomId} — Host: {room.host.name}
                     <br />
-                    {/* Solo mostrar el botón si el jugador NO es el host y si ya hay 2 jugadores, no motrarlo */}
+
+                    {/* Display join button if the player is not the host and if there are not 2 players yet */}
                     {room.host.name !== name &&
                       !room.players.some((p) => p.name === name) && (
                         <button onClick={() => handleJoin(room.roomId)}>
