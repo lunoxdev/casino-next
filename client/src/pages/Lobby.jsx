@@ -93,7 +93,7 @@ const Lobby = () => {
                 .map((room, index) => (
                   <li
                     key={index}
-                    className="border border-white rounded-md px-6 py-2 my-2"
+                    className="border border-sky-200/30 rounded-md px-6 py-2 my-2"
                   >
                     {room.gameName}
                     <br />
@@ -106,7 +106,7 @@ const Lobby = () => {
                       !room.players.some((p) => p.name === name) && (
                         <button
                           onClick={() => handleJoin(room.roomId)}
-                          className="border border-white rounded-md px-6 py-1 mt-4"
+                          className="bg-sky-200/30 hover:bg-sky-600/80 rounded-md px-6 py-1 mt-4 cursor-pointer"
                         >
                           Join
                         </button>
@@ -121,14 +121,14 @@ const Lobby = () => {
           {roomId && roomPlayers.length === 2 ? (
             <button
               onClick={handleStartMatch}
-              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mb-4"
+              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mb-4 cursor-pointer"
             >
               Start Match
             </button>
           ) : (
             <button
               onClick={handleCreateRoom}
-              className="bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition mb-4"
+              className="bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition mb-4 cursor-pointer"
             >
               Create Room
             </button>
@@ -138,7 +138,7 @@ const Lobby = () => {
 
           <button
             onClick={handleSignOut}
-            className="text-red-600 px-4 py-1 rounded hover:underline transition mb-4"
+            className="text-red-600 px-4 py-1 rounded hover:underline transition mb-4 cursor-pointer"
           >
             Sign Out
           </button>

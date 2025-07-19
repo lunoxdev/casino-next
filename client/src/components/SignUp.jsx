@@ -29,7 +29,7 @@ export default function SignUp() {
       />
       <button
         onClick={handleRegister}
-        className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4"
+        className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4 cursor-pointer"
       >
         Register
       </button>

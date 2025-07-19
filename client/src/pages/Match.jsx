@@ -53,7 +53,7 @@ const Match = () => {
 
       <button
         onClick={handleSpin}
-        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-80 px-6 py-1 rounded transition font-bold"
+        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-80 px-6 py-1 rounded transition font-bold cursor-pointer"
       >
         🎰 SPIN
       </button>
