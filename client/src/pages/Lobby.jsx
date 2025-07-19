@@ -82,7 +82,9 @@ const Lobby = () => {
                     key={index}
                     className="border border-white rounded-md px-6 py-2 my-2"
                   >
-                    Room: {room.roomId} — Host: {room.host.name}
+                    {room.game}
+                    <br />
+                    Host: {room.host.name}
                     <br />
                     {/* Display join button if the player is not the host and if there are not 2 players yet */}
                     {room.host.name !== name &&

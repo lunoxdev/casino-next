@@ -1,8 +1,9 @@
 export const matchRooms = new Map();
 
-export const createRoom = (roomId, hostPlayer) => {
+export const createRoom = (roomId, hostPlayer, game = "Gates Of Olympus") => {
   matchRooms.set(roomId, {
     roomId,
+    game,
     host: hostPlayer,
     players: [hostPlayer],
   });
