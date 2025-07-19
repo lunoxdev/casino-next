@@ -14,7 +14,6 @@ const Lobby = () => {
 
   const [players, setPlayers] = useState([]);
 
-
   useLobbySocket({ setPlayers }); // ⬅️ Socket hook for lobby events
 
   const handleSignOut = () => {
@@ -72,6 +71,20 @@ const Lobby = () => {
             ))}
           </ul>
 
+          <p className="font-bold text-lg">My Room:</p>
+          {roomId && (
+            <>
+              <p>{gameName}</p>
+              <ul className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
+                {roomPlayers.map((p, index) => (
+                  <li key={index}>{p.name}</li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          <br />
+
           <p className="font-bold text-lg">All Rooms:</p>
           {availableRooms.length > 0 && (
             <ul>
@@ -84,7 +97,9 @@ const Lobby = () => {
                   >
                     {room.gameName}
                     <br />
-                    Host: {room.host.name}
+                    <span className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
+                      {room.host.name}
+                    </span>
                     <br />
                     {/* Display join button if the player is not the host and if there are not 2 players yet */}
                     {room.host.name !== name &&
@@ -99,20 +114,6 @@ const Lobby = () => {
                   </li>
                 ))}
             </ul>
-          )}
-
-          <br />
-
-          <p className="font-bold text-lg">My Room:</p>
-          {roomId && (
-            <>
-              <p>{gameName}</p>
-              <ul>
-                {roomPlayers.map((p, index) => (
-                  <li key={index}>{p.name}</li>
-                ))}
-              </ul>
-            </>
           )}
 
           <br />
