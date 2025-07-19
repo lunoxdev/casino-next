@@ -8,7 +8,7 @@ import socket from "../socket";
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const { name, balance, registered, token, signOut } = usePlayerStore();
+  const { name, balance, registered, token, logOut } = usePlayerStore();
   const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
   const { roomId, roomPlayers, gameName } = myRoom;
 
@@ -16,9 +16,9 @@ const Lobby = () => {
 
   useLobbySocket({ setPlayers }); // ⬅️ Socket hook for lobby events
 
-  const handleSignOut = () => {
-    socket.emit("signOut", token); // Notify server to remove player
-    signOut(); // ⚠️ CHECK THIS
+  const handleLogOut = () => {
+    socket.emit("logOut", token); // Notify server to remove player
+    logOut(); // ⚠️ CHECK THIS
     clearRoom(); // ⚠️ CHECK THIS
     setRoomId(null); // ⚠️ CHECK THIS
   };
@@ -137,10 +137,10 @@ const Lobby = () => {
           <br />
 
           <button
-            onClick={handleSignOut}
+            onClick={handleLogOut}
             className="text-red-600 px-4 py-1 rounded hover:underline transition mb-4 cursor-pointer"
           >
-            Sign Out
+            Log Out
           </button>
         </>
       ) : (

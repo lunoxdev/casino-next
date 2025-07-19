@@ -26,7 +26,7 @@ export default function lobbySockets(socket, io) {
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
-  socket.on("signOut", (token) => {
+  socket.on("logOut", (token) => {
     if (!token) return;
 
     removePlayer(token);
