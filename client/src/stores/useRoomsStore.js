@@ -6,13 +6,14 @@ export const useRoomsStore = create(
     persist((set) => ({
       myRoom: {
         roomId: null,
+        gameName: null,
         roomPlayers: [],
       },
       availableRooms: [],
 
       // Setters
-      setMyRoom: (roomId, roomPlayers) =>
-        set({ myRoom: { roomId, roomPlayers } }),
+      setMyRoom: (roomId, gameName, roomPlayers) =>
+        set({ myRoom: { roomId, gameName, roomPlayers } }),
 
       setRoomId: (roomId) =>
         set((state) => ({
@@ -27,7 +28,8 @@ export const useRoomsStore = create(
       setAvailableRooms: (rooms) => set({ availableRooms: rooms }),
 
       // Reset
-      clearRoom: () => set({ myRoom: { roomId: null, roomPlayers: [] } }),
+      clearRoom: () =>
+        set({ myRoom: { roomId: null, gameName: null, roomPlayers: [] } }),
       clearAvailableRooms: () => set({ availableRooms: [] }),
     }))
   )

@@ -38,8 +38,15 @@ export default function lobbySockets(socket, io) {
     const player = { name, balance };
     createRoom(roomId, player);
 
+    const room = matchRooms.get(roomId);
+
     socket.join(roomId);
-    socket.emit("roomCreated", { roomId, player });
+    socket.emit("roomCreated", {
+      roomId,
+      player,
+      gameName: room.gameName,
+    });
+
     io.to(roomId).emit("matchPlayers", getRoomPlayers(roomId)); // ⬅️ broadcast for players in room
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });

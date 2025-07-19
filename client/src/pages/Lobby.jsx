@@ -10,10 +10,10 @@ const Lobby = () => {
   const navigate = useNavigate();
   const { name, balance, registered, token, signOut } = usePlayerStore();
   const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
+  const { roomId, roomPlayers, gameName } = myRoom;
 
   const [players, setPlayers] = useState([]);
 
-  const { roomId, roomPlayers } = myRoom;
 
   useLobbySocket({ setPlayers }); // ⬅️ Socket hook for lobby events
 
@@ -82,7 +82,7 @@ const Lobby = () => {
                     key={index}
                     className="border border-white rounded-md px-6 py-2 my-2"
                   >
-                    {room.game}
+                    {room.gameName}
                     <br />
                     Host: {room.host.name}
                     <br />
@@ -106,7 +106,7 @@ const Lobby = () => {
           <p className="font-bold text-lg">My Room:</p>
           {roomId && (
             <>
-              <p>Room ID: {roomId}</p>
+              <p>{gameName}</p>
               <ul>
                 {roomPlayers.map((p, index) => (
                   <li key={index}>{p.name}</li>

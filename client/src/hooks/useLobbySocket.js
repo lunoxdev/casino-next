@@ -29,8 +29,8 @@ export const useLobbySocket = ({ setPlayers }) => {
       if (currentPlayer) setBalance(currentPlayer.balance);
     });
 
-    socket.on("roomCreated", ({ roomId, player }) => {
-      setMyRoom(roomId, [player]);
+    socket.on("roomCreated", ({ roomId, gameName, player }) => {
+      setMyRoom(roomId, gameName, [player]);
     });
 
     socket.on("roomListUpdated", (rooms) => {
