@@ -64,7 +64,7 @@ const Lobby = () => {
             </span>
           </p>
 
-          <p className="font-bold text-lg">Players Connected:</p>
+          <p className="font-bold text-lg">Total Players Connected:</p>
           <ul className="mb-4 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
             {players.map((player, index) => (
               <li key={index}>{player.name}</li>
