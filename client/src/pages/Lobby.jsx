@@ -47,6 +47,10 @@ const Lobby = () => {
     navigate("/match");
   };
 
+  const handleLeave = () => {
+    console.log("Leaving room");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center">
       {registered ? (
@@ -73,14 +77,39 @@ const Lobby = () => {
 
           <p className="font-bold text-lg">My Room:</p>
           {roomId && (
-            <>
+            <div className="flex flex-col border border-sky-200/30 rounded-md px-6 py-2 my-2">
               <p>{gameName}</p>
               <ul className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
                 {roomPlayers.map((p, index) => (
                   <li key={index}>{p.name}</li>
                 ))}
               </ul>
-            </>
+
+              {roomPlayers.length === 2 ? (
+                <button
+                  onClick={handleStartMatch}
+                  className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mt-4 cursor-pointer"
+                >
+                  Start Match
+                </button>
+              ) : (
+                <button
+                  onClick={handleLeave}
+                  className="bg-red-600 px-4 py-1 rounded hover:bg-red-700 transition mt-4 cursor-pointer"
+                >
+                  Leave
+                </button>
+              )}
+            </div>
+          )}
+
+          {!roomId && (
+            <button
+              onClick={handleCreateRoom}
+              className="bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition mb-4 cursor-pointer"
+            >
+              Create Room
+            </button>
           )}
 
           <br />
@@ -114,24 +143,6 @@ const Lobby = () => {
                   </li>
                 ))}
             </ul>
-          )}
-
-          <br />
-
-          {roomId && roomPlayers.length === 2 ? (
-            <button
-              onClick={handleStartMatch}
-              className="bg-cyan-600 px-4 py-1 rounded hover:bg-cyan-700 transition mb-4 cursor-pointer"
-            >
-              Start Match
-            </button>
-          ) : (
-            <button
-              onClick={handleCreateRoom}
-              className="bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition mb-4 cursor-pointer"
-            >
-              Create Room
-            </button>
           )}
 
           <br />
