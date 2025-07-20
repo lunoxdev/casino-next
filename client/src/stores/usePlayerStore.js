@@ -8,7 +8,7 @@ export const usePlayerStore = create(
         name: "",
         balance: 0,
         registered: false,
-        token: "", // <-- Temporary token for the session
+        token: "",
 
         setBalance: (newBalance) => set({ balance: newBalance }),
         register: (name) => {
