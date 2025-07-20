@@ -30,7 +30,6 @@ export const useRoomsStore = create(
       // Reset
       clearRoom: () =>
         set({ myRoom: { roomId: null, gameName: null, roomPlayers: [] } }),
-      clearAvailableRooms: () => set({ availableRooms: [] }),
     }))
   )
 );
