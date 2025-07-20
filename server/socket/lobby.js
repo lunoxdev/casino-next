@@ -68,4 +68,22 @@ export default function lobbySockets(socket, io) {
     io.to(roomId).emit("matchPlayers", room.players); // ⬅️ broadcast for players in room
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
+
+  socket.on("leaveRoom", ({ roomId, name }) => {
+    const room = matchRooms.get(roomId);
+    if (!room) return;
+
+    room.players = room.players.filter((p) => p.name !== name);
+
+    if (room.players.length === 0) {
+      matchRooms.delete(roomId);
+    } else {
+      matchRooms.set(roomId, room);
+    }
+
+    socket.leave(roomId);
+
+    io.to(roomId).emit("matchPlayers", room.players); // ⬅️ broadcast for players in room
+    io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
+  });
 }

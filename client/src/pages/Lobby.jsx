@@ -18,20 +18,20 @@ const Lobby = () => {
 
   const handleLogOut = () => {
     socket.emit("logOut", token); // Notify server to remove player
+
     logOut(); // ⚠️ CHECK THIS
     clearRoom(); // ⚠️ CHECK THIS
-    setRoomId(null); // ⚠️ CHECK THIS
   };
 
   const handleCreateRoom = () => {
     const newRoomId = crypto.randomUUID();
-    setRoomId(newRoomId);
-
     socket.emit("createRoom", {
       roomId: newRoomId,
       name,
       balance,
     });
+
+    setRoomId(newRoomId);
   };
 
   const handleJoin = (roomIdToJoin) => {
@@ -48,7 +48,11 @@ const Lobby = () => {
   };
 
   const handleLeave = () => {
-    console.log("Leaving room");
+    if (!roomId || !name) return;
+
+    socket.emit("leaveRoom", { roomId, name });
+
+    clearRoom();
   };
 
   return (
