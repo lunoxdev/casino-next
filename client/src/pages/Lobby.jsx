@@ -97,7 +97,7 @@ const Lobby = () => {
                   onClick={handleLeave}
                   className="bg-red-600 px-4 py-1 rounded hover:bg-red-700 transition mt-4 cursor-pointer"
                 >
-                  Leave
+                  Leave Room
                 </button>
               )}
             </div>
