@@ -118,7 +118,7 @@ const Lobby = () => {
           {!roomId && (
             <button
               onClick={handleCreateRoom}
-              className="bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition mb-4 cursor-pointer"
+              className="bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition mt-2 mb-4 cursor-pointer"
             >
               Create Room
             </button>
