@@ -16,3 +16,9 @@ manageSockets(io);
 server.listen(3001, () =>
   console.log("✅ Backend ready on http://localhost:3001")
 );
+
+app.get("/", (req, res) => {
+  res.send(
+    "<h1>Backend is running and ready to accept socket connections!</h1>"
+  );
+});
