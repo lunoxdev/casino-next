@@ -26,12 +26,36 @@ export default function lobbySockets(socket, io) {
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
-  socket.on("logOut", (token) => {
-    if (!token) return;
+  socket.on("logOut", ({ token, name }) => {
+    if (!token || !name) return;
+
+    // 🔁 Search the player in the rooms
+    const roomEntry = Array.from(matchRooms.entries()).find(([_, room]) =>
+      room.players.some((p) => p.token === token || p.name === name)
+    );
+
+    if (roomEntry) {
+      const [roomId, room] = roomEntry;
+      room.players = room.players.filter(
+        (p) => p.token !== token && p.name !== name
+      );
+
+      if (room.players.length === 0) {
+        matchRooms.delete(roomId);
+      } else {
+        matchRooms.set(roomId, room);
+      }
+
+      socket.leave(roomId);
+      io.to(roomId).emit("matchPlayers", room.players);
+    }
 
     removePlayer(token);
-    io.emit("updatePlayers", getPlayersList());
-    console.log(`🔴 Player has signed out`);
+
+    io.emit("updatePlayers", getPlayersList()); // ⬅️ broadcast for all players in lobby
+    io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
+
+    console.log(`🔴 Player ${name} has logged out`);
   });
 
   socket.on("createRoom", ({ roomId, name, balance }) => {

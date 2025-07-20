@@ -17,10 +17,12 @@ const Lobby = () => {
   useLobbySocket({ setPlayers }); // ⬅️ Socket hook for lobby events
 
   const handleLogOut = () => {
-    socket.emit("logOut", token); // Notify server to remove player
+    socket.emit("logOut", { token, name });
 
-    logOut(); // ⚠️ CHECK THIS
-    clearRoom(); // ⚠️ CHECK THIS
+    logOut(); // ⬅️ Clear player state
+    clearRoom(); // ⬅️ Clear rooms state
+
+    localStorage.removeItem("player-storage"); // ⬅️ Clear localStorage
   };
 
   const handleCreateRoom = () => {
@@ -44,7 +46,13 @@ const Lobby = () => {
   };
 
   const handleStartMatch = () => {
+    if (!roomId || roomPlayers.length < 2) return;
+
     navigate("/match");
+
+    // ⚠️ TEMPORAL: DELETE THIS LATER
+    socket.emit("leaveRoom", { roomId, name });
+    clearRoom();
   };
 
   const handleLeave = () => {
