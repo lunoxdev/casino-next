@@ -43,13 +43,42 @@ const Match = () => {
         ⚔
       </h1>
 
-      <ul className="mb-4 text-gray-300">
-        {players.map((player, index) => (
-          <li key={index}>
-            {player.name} 💰 ${player.balance}
-          </li>
-        ))}
-      </ul>
+      <div className="grid grid-cols-3 gap-4 items-center text-center text-white text-lg font-semibold mb-4">
+        {/* Player */}
+        <div>
+          {players[0] ? (
+            <>
+              <p className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
+                {players[0].name}
+              </p>
+              <p>💰 ${players[0].balance}</p>
+            </>
+          ) : (
+            <p>Waiting for you...</p>
+          )}
+        </div>
+
+        {/* VS Text */}
+        <div>
+          <p className="text-2xl bg-gradient-to-r from-gray-500 via-gray-300 to-gray-500 inline-block text-transparent bg-clip-text">
+            VS
+          </p>
+        </div>
+
+        {/* Opponent */}
+        <div>
+          {players[1] ? (
+            <>
+              <p className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
+                {players[1].name}
+              </p>
+              <p>💰 ${players[1].balance}</p>
+            </>
+          ) : (
+            <p>Waiting for opponent...</p>
+          )}
+        </div>
+      </div>
 
       <button
         onClick={handleSpin}
