@@ -40,6 +40,10 @@ export const useLobbySocket = ({ setPlayers }) => {
     socket.on("matchPlayers", (playersInRoom) => {
       setRoomPlayers(playersInRoom);
     });
+
+    socket.on("joinedRoom", ({ roomId, gameName, roomPlayers }) => {
+      setMyRoom(roomId, gameName, roomPlayers);
+    });
   }, [
     rejoin,
     token,
@@ -56,6 +60,7 @@ export const useLobbySocket = ({ setPlayers }) => {
     socket.off("roomCreated");
     socket.off("roomListUpdated");
     socket.off("matchPlayers");
+    socket.off("joinedRoom");
 
     listenersInitialized = false;
   }, [rejoin]);

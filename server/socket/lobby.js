@@ -89,6 +89,14 @@ export default function lobbySockets(socket, io) {
 
     socket.join(roomId);
 
+    // ✅ Emit event to the joining player
+    socket.emit("joinedRoom", {
+      roomId,
+      gameName: room.gameName,
+      roomPlayers: room.players,
+    });
+
+    // ⬅️ broadcast para los demás
     io.to(roomId).emit("matchPlayers", room.players); // ⬅️ broadcast for players in room
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
