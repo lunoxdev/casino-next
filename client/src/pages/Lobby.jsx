@@ -46,13 +46,9 @@ const Lobby = () => {
   };
 
   const handleStartMatch = () => {
-    if (!roomId || roomPlayers.length < 2) return;
+    if (roomPlayers.length < 2) return;
 
     navigate("/match");
-
-    // ⚠️ TEMPORAL: DELETE THIS LATER
-    socket.emit("leaveRoom", { roomId, name });
-    clearRoom();
   };
 
   const handleLeave = () => {
