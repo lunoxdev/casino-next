@@ -11,24 +11,24 @@ export default function matchSockets(socket, io) {
     const player = players.get(token);
     if (!player) return;
 
-    const win = Math.random() < 0.5;
-    const amount = Math.floor(Math.random() * 100) + 1;
-    const delta = win ? amount : -amount;
+    const wonSomething = Math.random() < 0.5;
+    const amount = wonSomething ? Math.floor(Math.random() * 100) + 1 : 0;
 
-    player.balance += delta;
-    players.set(token, player);
+    if (amount > 0) {
+      const resultText = `🎉 You won $${amount}!`;
 
-    const resultText = win
-      ? `🎉 You won $${amount}!`
-      : `💀 You lost $${amount}.`;
+      socket.emit("spinResult", {
+        token,
+        message: resultText,
+        balance: player.balance,
+      });
 
-    // Emit result individually to the player
-    socket.emit("spinResult", {
-      message: resultText,
-      balance: player.balance,
-    });
+      setTimeout(() => {
+        player.balance += amount;
+        players.set(token, player);
 
-    // Emit updated player list to all players
-    io.emit("matchPlayers", Array.from(players.values()));
+        io.emit("matchPlayers", Array.from(players.values()));
+      }, 3000);
+    }
   });
 }
