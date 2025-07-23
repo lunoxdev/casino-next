@@ -35,13 +35,21 @@ const Match = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1 className="text-3xl mb-4">
+      <h1 className="text-xl lg:text-4xl mb-2">
         ⚔{" "}
         <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
           Battle
         </span>{" "}
         ⚔
       </h1>
+
+      {/* Game iFrame */}
+      <iframe
+        title="Gate of Olympus"
+        src="https://example.com"
+        // src="https://demogamesfree.eotofjxixi.net/gs2c/openGame.do?gameSymbol=vs20olympgold&amp;lang=en&amp;cur=USD&amp;lobbyUrl=https://stake.com/casino/home&amp;cashierUrl=https://stake.com/casino/home?tab=deposit&amp;currency=btc&amp;modal=wallet&amp;stylename=rare_stake&amp;jurisdiction=99&amp;treq=m618tX112Qn6xBt1hupM1AS4H9vMQAV2qqJFuZdSWhtIwbtSYw3DCji6YLGkQYCP&amp;isGameUrlApiCalled=true&amp;userId=demo"
+        className="w-[500px] lg:w-[980px] aspect-video mb-2 rounded-sm block"
+      />
 
       <div className="grid grid-cols-3 gap-4 items-center text-center text-white text-lg font-semibold mb-4">
         {/* Player */}
