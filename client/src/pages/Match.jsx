@@ -124,7 +124,7 @@ const Match = () => {
         <div className="relative">
           <button
             onClick={handleSpin}
-            className="border p-6 lg:p-16 rounded-full transition font-bold cursor-pointer absolute bottom-0 left-48 lg:left-[355px] transform -translate-x-1.5 -translate-y-[133px] lg:-translate-y-[185px] animate-ping"
+            className="border border-white/5 p-6 rounded-full transition font-bold cursor-pointer absolute bottom-0 left-52 lg:left-[250px] transform -translate-x-1.5 -translate-y-[120px] lg:-translate-y-[90px] animate-ping"
           ></button>
         </div>
       )}

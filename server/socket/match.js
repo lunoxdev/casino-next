@@ -11,7 +11,7 @@ export default function matchSockets(socket, io) {
     const player = players.get(token);
     if (!player) return;
 
-    const wonSomething = Math.random() < 0.5;
+    const wonSomething = Math.random() < 0.8;
     const amount = wonSomething ? Math.floor(Math.random() * 100) + 1 : 0;
 
     if (amount > 0) {
