@@ -1,14 +1,35 @@
-// components/SignUp.jsx
 import { useState } from "react";
 import { usePlayerStore } from "../stores/usePlayerStore";
 
 export default function SignUp() {
   const [inputName, setInputName] = useState("");
   const register = usePlayerStore((state) => state.register);
+  const [message, setMessage] = useState("");
 
-  const handleRegister = () => {
-    if (inputName.trim()) {
-      register(inputName);
+  const handleRegister = async () => {
+    const trimmedName = inputName.trim();
+    const validName = /^[a-zA-Z0-9]+$/.test(trimmedName);
+
+    if (!trimmedName) {
+      setMessage("⚠️ Name cannot be empty.");
+      return;
+    }
+
+    if (trimmedName.length < 3 || trimmedName.length > 12) {
+      setMessage("⚠️ Name must be between 3 and 12 characters.");
+      return;
+    }
+
+    if (!validName) {
+      setMessage("⚠️ Name can only contain letters and numbers.");
+      return;
+    }
+
+    try {
+      await register(trimmedName);
+      setMessage("");
+    } catch (err) {
+      setMessage(err.message);
     }
   };
 
@@ -25,6 +46,7 @@ export default function SignUp() {
         value={inputName}
         onChange={(e) => setInputName(e.target.value)}
         placeholder="Enter your name"
+        maxLength={12}
         className="border border-sky-200/30 hover:border-sky-600/80 p-2 mb-4 rounded-md text-center"
       />
       <button
@@ -33,6 +55,8 @@ export default function SignUp() {
       >
         Register
       </button>
+
+      {message && <p className="text-center text-red-500">{message}</p>}
     </>
   );
 }
