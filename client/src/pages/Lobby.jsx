@@ -5,24 +5,23 @@ import { useLobbySocket } from "../hooks/useLobbySocket";
 import { useNavigate } from "react-router-dom";
 import SignUp from "../components/SignUp";
 import socket from "../socket";
+import { useAuthRefresh } from "../hooks/useAuthRefresh";
 
 const Lobby = () => {
+  useAuthRefresh();
   const navigate = useNavigate();
   const { name, balance, registered, token, logOut } = usePlayerStore();
   const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
   const { roomId, roomPlayers, gameName } = myRoom;
 
   const [players, setPlayers] = useState([]);
-
-  useLobbySocket({ setPlayers }); // ⬅️ Socket hook for lobby events
+  useLobbySocket({ setPlayers });
 
   const handleLogOut = () => {
     socket.emit("logOut", { token, name });
-
-    logOut(); // ⬅️ Clear player state
-    clearRoom(); // ⬅️ Clear rooms state
-
-    localStorage.removeItem("player-storage"); // ⬅️ Clear localStorage
+    logOut();
+    clearRoom();
+    localStorage.removeItem("player-storage");
   };
 
   const handleCreateRoom = () => {
@@ -32,7 +31,6 @@ const Lobby = () => {
       name,
       balance,
     });
-
     setRoomId(newRoomId);
   };
 
@@ -47,15 +45,12 @@ const Lobby = () => {
 
   const handleStartMatch = () => {
     if (roomPlayers.length < 2) return;
-
     navigate("/match");
   };
 
   const handleLeave = () => {
     if (!roomId || !name) return;
-
     socket.emit("leaveRoom", { roomId, name });
-
     clearRoom();
   };
 
@@ -138,7 +133,6 @@ const Lobby = () => {
                       {room.host.name}
                     </span>
                     <br />
-                    {/* Display join button if the player is not the host and if there are not 2 players yet */}
                     {room.host.name !== name &&
                       !room.players.some((p) => p.name === name) && (
                         <button
