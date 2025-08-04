@@ -13,47 +13,66 @@ const generateAccessToken = (nickname) => {
   return jwt.sign({ nickname }, JWT_SECRET, { expiresIn: "1d" });
 };
 
+// 🧩 REGISTER
 router.post("/register", async (req, res) => {
-  console.log("📨 Incoming register request:", req.body);
+  console.log("📨 Incoming /register request:", req.body);
 
   try {
-    const { nickname } = req.body;
+    let { nickname } = req.body;
 
-    if (!nickname) {
-      console.warn("⚠️ Missing nickname");
+    if (!nickname || typeof nickname !== "string") {
+      console.warn("⚠️ Nickname missing or invalid");
       return res.status(400).json({ error: "Nickname is required" });
     }
 
-    // Aquí va tu lógica de inserción en la base de datos
-    const result = await pool.query(
-      "INSERT INTO players (nickname, balance) VALUES ($1, $2) RETURNING *",
-      [nickname, 1000]
+    nickname = nickname.trim().toLowerCase();
+
+    if (nickname.length > 12) {
+      console.warn("⚠️ Nickname too long:", nickname);
+      return res
+        .status(400)
+        .json({ error: "Nickname too long (max 12 characters)" });
+    }
+
+    const { rows: existing } = await pool.query(
+      "SELECT * FROM players WHERE nickname = $1",
+      [nickname]
     );
 
-    console.log("✅ Player registered:", result.rows[0]);
+    if (existing.length > 0) {
+      console.warn("⚠️ Nickname already taken:", nickname);
+      return res.status(409).json({ error: "Nickname already taken" });
+    }
 
-    // Generar token, refreshToken, etc.
-    const token = generateToken(result.rows[0]);
-    const refreshToken = generateRefreshToken(result.rows[0]);
+    const uuid = uuidv4();
+    const refreshToken = uuidv4();
+    const accessToken = generateAccessToken(nickname);
 
-    res.json({
-      nickname: result.rows[0].nickname,
-      balance: result.rows[0].balance,
-      token,
-      refreshToken,
-    });
+    await pool.query(
+      "INSERT INTO players (nickname, balance, uuid, refresh_token) VALUES ($1, $2, $3, $4)",
+      [nickname, 1000, uuid, refreshToken]
+    );
+
+    console.log("✅ Player registered:", nickname);
+
+    res.json({ nickname, balance: 1000, token: accessToken, refreshToken });
   } catch (err) {
-    console.error("❌ Error en /register:", err);
+    console.error("❌ Error in /register:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// 🔄 REFRESH TOKEN
 router.post("/refresh", async (req, res) => {
+  console.log("🔄 Incoming /refresh request:", req.body);
+
   try {
     const { refreshToken } = req.body;
 
-    if (!refreshToken)
+    if (!refreshToken) {
+      console.warn("⚠️ Missing refresh token");
       return res.status(400).json({ error: "Refresh token required" });
+    }
 
     const { rows: players } = await pool.query(
       "SELECT * FROM players WHERE refresh_token = $1",
@@ -61,8 +80,10 @@ router.post("/refresh", async (req, res) => {
     );
     const player = players[0];
 
-    if (!player)
+    if (!player) {
+      console.warn("⚠️ Invalid refresh token:", refreshToken);
       return res.status(403).json({ error: "Invalid refresh token" });
+    }
 
     const newAccessToken = generateAccessToken(player.nickname);
     const newRefreshToken = uuidv4();
@@ -72,18 +93,24 @@ router.post("/refresh", async (req, res) => {
       [newRefreshToken, player.nickname]
     );
 
+    console.log("✅ Token refreshed for:", player.nickname);
+
     res.json({ token: newAccessToken, refreshToken: newRefreshToken });
   } catch (err) {
-    console.error("❌ Error en /refresh:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("❌ Error in /refresh:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// 🔑 LOGIN
 router.post("/login", async (req, res) => {
+  console.log("🔑 Incoming /login request:", req.body);
+
   try {
     const { nickname } = req.body;
 
     if (!nickname || typeof nickname !== "string") {
+      console.warn("⚠️ Nickname missing or invalid");
       return res.status(400).json({ error: "Nickname is required" });
     }
 
@@ -94,6 +121,7 @@ router.post("/login", async (req, res) => {
 
     const player = players[0];
     if (!player) {
+      console.warn("⚠️ Nickname not found:", nickname);
       return res.status(404).json({ error: "Nickname not found" });
     }
 
@@ -105,6 +133,8 @@ router.post("/login", async (req, res) => {
       [newRefreshToken, player.nickname]
     );
 
+    console.log("✅ Login successful for:", player.nickname);
+
     res.json({
       nickname: player.nickname,
       balance: player.balance,
@@ -112,8 +142,8 @@ router.post("/login", async (req, res) => {
       refreshToken: newRefreshToken,
     });
   } catch (err) {
-    console.error("❌ Error en /login:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("❌ Error in /login:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
