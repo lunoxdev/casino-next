@@ -1,17 +1,6 @@
-import pg from "pg";
-const { Pool } = pg;
+import postgres from "postgres";
 
-console.log("🔧 Initializing DB pool...");
+const connectionString = process.env.POSTGRES_DATABASE;
+const sql = postgres(connectionString);
 
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
-
-pool.on("error", (err) => {
-  console.error("❌ Pool error:", err);
-});
-
-export default pool;
+export default sql;
