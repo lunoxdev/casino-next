@@ -11,6 +11,8 @@ export default function SignUp() {
     const trimmedNickname = inputNickname.trim();
     const validNickname = /^[a-zA-Z0-9]+$/.test(trimmedNickname);
 
+    console.log("📝 Submitted nickname:", trimmedNickname);
+
     if (!trimmedNickname) {
       setMessage("⚠️ Nickname cannot be empty.");
       return;
@@ -28,13 +30,18 @@ export default function SignUp() {
 
     try {
       await register(trimmedNickname);
+      console.log("✅ Registered successfully");
       setMessage("");
     } catch (err) {
+      console.warn("⚠️ Register failed:", err.message);
+
       if (err.message.includes("already taken")) {
         try {
           await login(trimmedNickname);
+          console.log("✅ Logged in after nickname conflict");
           setMessage("");
         } catch (loginErr) {
+          console.warn("⚠️ Login after conflict failed:", loginErr.message);
           setMessage(loginErr.message);
         }
       } else {

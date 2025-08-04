@@ -15,8 +15,11 @@ export const usePlayerStore = create(
         setBalance: (newBalance) => set({ balance: newBalance }),
 
         register: async (nickname) => {
+          console.log("📨 Attempting to register nickname:", nickname);
           try {
             const res = await axios.post("/api/player/register", { nickname });
+            console.log("✅ Registration response:", res.data);
+
             const {
               nickname: playerNickname,
               balance,
@@ -32,6 +35,8 @@ export const usePlayerStore = create(
               registered: true,
             });
           } catch (err) {
+            console.error("❌ Registration error:", err);
+
             if (err.response && err.response.status === 409) {
               throw new Error("⚠️ Nickname already taken");
             }
@@ -67,8 +72,11 @@ export const usePlayerStore = create(
         },
 
         login: async (nickname) => {
+          console.log("📨 Attempting to login with nickname:", nickname);
           try {
             const res = await axios.post("/api/player/login", { nickname });
+            console.log("✅ Login response:", res.data);
+
             const {
               nickname: playerNickname,
               balance,
@@ -84,6 +92,8 @@ export const usePlayerStore = create(
               registered: true,
             });
           } catch (err) {
+            console.error("❌ Login error:", err);
+
             if (err.response?.status === 404) {
               throw new Error("⚠️ Nickname not found");
             }
