@@ -4,9 +4,10 @@ import { usePlayerStore } from "../stores/usePlayerStore";
 export default function SignUp() {
   const [inputNickname, setInputNickname] = useState("");
   const register = usePlayerStore((state) => state.register);
+  const login = usePlayerStore((state) => state.login);
   const [message, setMessage] = useState("");
 
-  const handleRegister = async () => {
+  const handleSubmit = async () => {
     const trimmedNickname = inputNickname.trim();
     const validNickname = /^[a-zA-Z0-9]+$/.test(trimmedNickname);
 
@@ -29,7 +30,16 @@ export default function SignUp() {
       await register(trimmedNickname);
       setMessage("");
     } catch (err) {
-      setMessage(err.message);
+      if (err.message.includes("already taken")) {
+        try {
+          await login(trimmedNickname);
+          setMessage("");
+        } catch (loginErr) {
+          setMessage(loginErr.message);
+        }
+      } else {
+        setMessage(err.message);
+      }
     }
   };
 
@@ -44,6 +54,7 @@ export default function SignUp() {
 
       <input
         type="text"
+        name="nickname"
         value={inputNickname}
         onChange={(e) => setInputNickname(e.target.value)}
         placeholder="Enter your nickname"
@@ -52,10 +63,10 @@ export default function SignUp() {
       />
 
       <button
-        onClick={handleRegister}
+        onClick={handleSubmit}
         className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4 cursor-pointer"
       >
-        Register
+        Enter
       </button>
 
       {message && <p className="text-center text-red-500">{message}</p>}

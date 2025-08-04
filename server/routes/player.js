@@ -75,4 +75,37 @@ router.post("/refresh", async (req, res) => {
   res.json({ token: newAccessToken, refreshToken: newRefreshToken });
 });
 
+router.post("/login", async (req, res) => {
+  const { nickname } = req.body;
+
+  if (!nickname || typeof nickname !== "string") {
+    return res.status(400).json({ error: "Nickname is required" });
+  }
+
+  const [players] = await pool.query(
+    "SELECT * FROM players WHERE nickname = ?",
+    [nickname.trim().toLowerCase()]
+  );
+
+  const player = players[0];
+  if (!player) {
+    return res.status(404).json({ error: "Nickname not found" });
+  }
+
+  const accessToken = generateAccessToken(player.nickname);
+  const newRefreshToken = uuidv4();
+
+  await pool.query("UPDATE players SET refresh_token = ? WHERE nickname = ?", [
+    newRefreshToken,
+    player.nickname,
+  ]);
+
+  res.json({
+    nickname: player.nickname,
+    balance: player.balance,
+    token: accessToken,
+    refreshToken: newRefreshToken,
+  });
+});
+
 export default router;

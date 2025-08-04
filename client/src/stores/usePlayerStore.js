@@ -66,6 +66,31 @@ export const usePlayerStore = create(
           }
         },
 
+        login: async (nickname) => {
+          try {
+            const res = await axios.post("/api/player/login", { nickname });
+            const {
+              nickname: playerNickname,
+              balance,
+              token,
+              refreshToken,
+            } = res.data;
+
+            set({
+              nickname: playerNickname,
+              balance,
+              token,
+              refreshToken,
+              registered: true,
+            });
+          } catch (err) {
+            if (err.response?.status === 404) {
+              throw new Error("⚠️ Nickname not found");
+            }
+            throw new Error("❌ Login failed. Try again.");
+          }
+        },
+
         logOut: () => {
           set({
             nickname: "",
