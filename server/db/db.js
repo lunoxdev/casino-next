@@ -1,12 +1,8 @@
-import pkg from "pg";
-const { Pool } = pkg;
+import pg from "pg";
+const { Pool } = pg;
 
 const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
-  port: 5432,
+  connectionString: process.env.POSTGRES_URL,
   ssl: { rejectUnauthorized: false },
 });
 
