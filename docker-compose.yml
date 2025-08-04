@@ -1,26 +1,27 @@
+version: "3.8"
+
 services:
-  mysql:
-    image: mysql:8
+  postgres:
+    image: postgres:15
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./mysql-init:/docker-entrypoint-initdb.d
+      - pg_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
 
   server:
     build: ./server
     ports:
       - "3001:3001"
     depends_on:
-      - mysql
+      - postgres
     environment:
-      DB_HOST: ${DB_HOST}
+      DB_HOST: postgres
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
@@ -35,4 +36,4 @@ services:
       - server
 
 volumes:
-  mysql_data:
+  pg_data:
