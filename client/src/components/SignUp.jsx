@@ -2,31 +2,31 @@ import { useState } from "react";
 import { usePlayerStore } from "../stores/usePlayerStore";
 
 export default function SignUp() {
-  const [inputName, setInputName] = useState("");
+  const [inputNickname, setInputNickname] = useState("");
   const register = usePlayerStore((state) => state.register);
   const [message, setMessage] = useState("");
 
   const handleRegister = async () => {
-    const trimmedName = inputName.trim();
-    const validName = /^[a-zA-Z0-9]+$/.test(trimmedName);
+    const trimmedNickname = inputNickname.trim();
+    const validNickname = /^[a-zA-Z0-9]+$/.test(trimmedNickname);
 
-    if (!trimmedName) {
-      setMessage("⚠️ Name cannot be empty.");
+    if (!trimmedNickname) {
+      setMessage("⚠️ Nickname cannot be empty.");
       return;
     }
 
-    if (trimmedName.length < 3 || trimmedName.length > 12) {
-      setMessage("⚠️ Name must be between 3 and 12 characters.");
+    if (trimmedNickname.length < 3 || trimmedNickname.length > 12) {
+      setMessage("⚠️ Nickname must be between 3 and 12 characters.");
       return;
     }
 
-    if (!validName) {
-      setMessage("⚠️ Name can only contain letters and numbers.");
+    if (!validNickname) {
+      setMessage("⚠️ Nickname can only contain letters and numbers.");
       return;
     }
 
     try {
-      await register(trimmedName);
+      await register(trimmedNickname);
       setMessage("");
     } catch (err) {
       setMessage(err.message);
@@ -41,14 +41,16 @@ export default function SignUp() {
           PVP Casino
         </span>
       </h1>
+
       <input
         type="text"
-        value={inputName}
-        onChange={(e) => setInputName(e.target.value)}
-        placeholder="Enter your name"
+        value={inputNickname}
+        onChange={(e) => setInputNickname(e.target.value)}
+        placeholder="Enter your nickname"
         maxLength={12}
         className="border border-sky-200/30 hover:border-sky-600/80 p-2 mb-4 rounded-md text-center"
       />
+
       <button
         onClick={handleRegister}
         className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4 cursor-pointer"

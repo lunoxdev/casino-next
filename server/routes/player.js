@@ -9,34 +9,44 @@ const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Function to generate access token
-const generateAccessToken = (name) => {
-  return jwt.sign({ name }, JWT_SECRET, { expiresIn: "24h" });
+const generateAccessToken = (nickname) => {
+  return jwt.sign({ nickname }, JWT_SECRET, { expiresIn: "1d" });
 };
 
 router.post("/register", async (req, res) => {
-  const { name } = req.body;
+  let { nickname } = req.body;
 
-  if (!name || typeof name !== "string") {
-    return res.status(400).json({ error: "Name is required" });
+  if (!nickname || typeof nickname !== "string") {
+    return res.status(400).json({ error: "Nickname is required" });
   }
 
-  const [existing] = await pool.query("SELECT * FROM players WHERE name = ?", [
-    name,
-  ]);
-  
-  if (existing.length > 0) {
-    return res.status(409).json({ error: "Name already taken" });
+  nickname = nickname.trim().toLowerCase();
+
+  if (nickname.length > 12) {
+    return res
+      .status(400)
+      .json({ error: "Nickname too long (max 12 characters)" });
   }
 
-  const refreshToken = uuidv4();
-  const accessToken = generateAccessToken(name);
-
-  await pool.query(
-    "INSERT INTO players (name, token, refresh_token) VALUES (?, ?, ?)",
-    [name, accessToken, refreshToken]
+  const [existing] = await pool.query(
+    "SELECT * FROM players WHERE nickname = ?",
+    [nickname]
   );
 
-  res.json({ name, balance: 1000, token: accessToken, refreshToken });
+  if (existing.length > 0) {
+    return res.status(409).json({ error: "Nickname already taken" });
+  }
+
+  const uuid = uuidv4();
+  const refreshToken = uuidv4();
+  const accessToken = generateAccessToken(nickname);
+
+  await pool.query(
+    "INSERT INTO players (nickname, balance, uuid, refresh_token) VALUES (?, ?, ?, ?)",
+    [nickname, 1000, uuid, refreshToken]
+  );
+
+  res.json({ nickname, balance: 1000, token: accessToken, refreshToken });
 });
 
 // Refresh token
@@ -54,13 +64,13 @@ router.post("/refresh", async (req, res) => {
 
   if (!player) return res.status(403).json({ error: "Invalid refresh token" });
 
-  const newAccessToken = generateAccessToken(player.name);
+  const newAccessToken = generateAccessToken(player.nickname);
   const newRefreshToken = uuidv4();
 
-  await pool.query(
-    "UPDATE players SET token = ?, refresh_token = ? WHERE name = ?",
-    [newAccessToken, newRefreshToken, player.name]
-  );
+  await pool.query("UPDATE players SET refresh_token = ? WHERE nickname = ?", [
+    newRefreshToken,
+    player.nickname,
+  ]);
 
   res.json({ token: newAccessToken, refreshToken: newRefreshToken });
 });

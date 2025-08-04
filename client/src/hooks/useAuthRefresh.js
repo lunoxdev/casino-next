@@ -19,19 +19,17 @@ export const useAuthRefresh = () => {
       const now = Date.now();
       const refreshTime = exp - now - 3600000; // 1h before expiration
 
-      // Initial check; if token is expired, refresh it
       if (refreshTime <= 0) {
         refreshAccessToken();
         return;
       }
 
-      // Refresh token just before expiration
       timeoutId = setTimeout(() => {
         refreshAccessToken();
       }, refreshTime);
     } catch (err) {
       console.error("Error decoding token:", err);
-      refreshAccessToken(); // fallback
+      refreshAccessToken();
     }
 
     return () => clearTimeout(timeoutId);

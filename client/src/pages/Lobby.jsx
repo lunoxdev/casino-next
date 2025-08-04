@@ -8,17 +8,17 @@ import socket from "../socket";
 import { useAuthRefresh } from "../hooks/useAuthRefresh";
 
 const Lobby = () => {
-  useAuthRefresh();
   const navigate = useNavigate();
-  const { name, balance, registered, token, logOut } = usePlayerStore();
+  const { nickname, balance, registered, token, logOut } = usePlayerStore();
   const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
   const { roomId, roomPlayers, gameName } = myRoom;
 
   const [players, setPlayers] = useState([]);
+  useAuthRefresh();
   useLobbySocket({ setPlayers });
 
   const handleLogOut = () => {
-    socket.emit("logOut", { token, name });
+    socket.emit("logOut", { token, nickname });
     logOut();
     clearRoom();
     localStorage.removeItem("player-storage");
@@ -28,7 +28,7 @@ const Lobby = () => {
     const newRoomId = crypto.randomUUID();
     socket.emit("createRoom", {
       roomId: newRoomId,
-      name,
+      nickname,
       balance,
     });
     setRoomId(newRoomId);
@@ -37,7 +37,7 @@ const Lobby = () => {
   const handleJoin = (roomIdToJoin) => {
     socket.emit("joinRoom", {
       roomId: roomIdToJoin,
-      name,
+      nickname,
       balance,
     });
     setRoomId(roomIdToJoin);
@@ -49,8 +49,8 @@ const Lobby = () => {
   };
 
   const handleLeave = () => {
-    if (!roomId || !name) return;
-    socket.emit("leaveRoom", { roomId, name });
+    if (!roomId || !nickname) return;
+    socket.emit("leaveRoom", { roomId, nickname });
     clearRoom();
   };
 
@@ -61,7 +61,7 @@ const Lobby = () => {
           <h1 className="text-4xl mb-2">
             Hi,{" "}
             <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
-              {name}
+              {nickname}
             </span>
           </h1>
           <p className="text-lg mb-4">
@@ -74,7 +74,7 @@ const Lobby = () => {
           <p className="font-bold text-lg">Total Players Connected:</p>
           <ul className="mb-4 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
             {players.map((player, index) => (
-              <li key={index}>{player.name}</li>
+              <li key={index}>{player.nickname}</li>
             ))}
           </ul>
 
@@ -84,7 +84,7 @@ const Lobby = () => {
               <p>{gameName}</p>
               <ul className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
                 {roomPlayers.map((p, index) => (
-                  <li key={index}>{p.name}</li>
+                  <li key={index}>{p.nickname}</li>
                 ))}
               </ul>
 
@@ -121,7 +121,9 @@ const Lobby = () => {
           {availableRooms.length > 0 && (
             <ul>
               {availableRooms
-                .filter((room) => !room.players.some((p) => p.name === name))
+                .filter(
+                  (room) => !room.players.some((p) => p.nickname === nickname)
+                )
                 .map((room, index) => (
                   <li
                     key={index}
@@ -130,11 +132,11 @@ const Lobby = () => {
                     {room.gameName}
                     <br />
                     <span className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
-                      {room.host.name}
+                      {room.host.nickname}
                     </span>
                     <br />
-                    {room.host.name !== name &&
-                      !room.players.some((p) => p.name === name) && (
+                    {room.host.nickname !== nickname &&
+                      !room.players.some((p) => p.nickname === nickname) && (
                         <button
                           onClick={() => handleJoin(room.roomId)}
                           className="bg-sky-200/30 hover:bg-sky-600/80 rounded-md px-6 py-1 mt-4 cursor-pointer"

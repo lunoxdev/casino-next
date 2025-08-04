@@ -6,7 +6,7 @@ export const usePlayerStore = create(
   devtools(
     persist(
       (set, get) => ({
-        name: "",
+        nickname: "",
         balance: 0,
         token: "",
         refreshToken: "",
@@ -14,13 +14,18 @@ export const usePlayerStore = create(
 
         setBalance: (newBalance) => set({ balance: newBalance }),
 
-        register: async (name) => {
+        register: async (nickname) => {
           try {
-            const res = await axios.post("/api/player/register", { name });
-            const { name: playerName, balance, token, refreshToken } = res.data;
+            const res = await axios.post("/api/player/register", { nickname });
+            const {
+              nickname: playerNickname,
+              balance,
+              token,
+              refreshToken,
+            } = res.data;
 
             set({
-              name: playerName,
+              nickname: playerNickname,
               balance,
               token,
               refreshToken,
@@ -28,7 +33,7 @@ export const usePlayerStore = create(
             });
           } catch (err) {
             if (err.response && err.response.status === 409) {
-              throw new Error("⚠️ Name already taken");
+              throw new Error("⚠️ Nickname already taken");
             }
             throw new Error("❌ Registration failed. Try again.");
           }
@@ -44,40 +49,30 @@ export const usePlayerStore = create(
             });
             const { token: newToken, refreshToken: newRefreshToken } = res.data;
 
-            // Update state
-            set((state) => ({
-              ...state,
+            set({
               token: newToken,
               refreshToken: newRefreshToken,
-            }));
-
-            // Save updated token to local storage
-            const playerData = JSON.parse(
-              localStorage.getItem("player-storage")
-            );
-            playerData.state.token = newToken;
-            playerData.state.refreshToken = newRefreshToken;
-            localStorage.setItem("player-storage", JSON.stringify(playerData));
+            });
           } catch (err) {
             console.error("Error renewing token:", err);
 
             set({
-              name: "",
+              nickname: "",
               balance: 0,
-              registered: false,
               token: "",
               refreshToken: "",
+              registered: false,
             });
           }
         },
 
         logOut: () => {
           set({
-            name: "",
+            nickname: "",
             balance: 0,
-            registered: false,
             token: "",
             refreshToken: "",
+            registered: false,
           });
         },
       }),
