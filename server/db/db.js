@@ -2,12 +2,12 @@ import pkg from "pg";
 const { Pool } = pkg;
 
 const pool = new Pool({
-  host: process.env.DB_HOST,
+  host: process.env.POSTGRES_HOST,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DATABASE,
   port: 5432,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: false }, // Supabase requiere SSL
+  ssl: { rejectUnauthorized: false },
 });
 
 export default pool;
