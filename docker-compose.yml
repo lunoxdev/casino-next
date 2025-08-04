@@ -12,18 +12,19 @@ services:
       - pg_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
 
-  server:
-    build: ./server
-    ports:
-      - "3001:3001"
-    depends_on:
-      - postgres
-    environment:
-      DB_HOST: postgres
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      JWT_SECRET: ${JWT_SECRET}
+server:
+  build: ./server
+  ports:
+    - "3001:3001"
+  depends_on:
+    - postgres
+  environment:
+    POSTGRES_URL: ${POSTGRES_URL}
+    DB_HOST: postgres
+    DB_USER: ${DB_USER}
+    DB_PASSWORD: ${DB_PASSWORD}
+    DB_NAME: ${DB_NAME}
+    JWT_SECRET: ${JWT_SECRET}
 
   client:
     build: ./client
