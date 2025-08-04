@@ -63,42 +63,28 @@ router.post("/register", async (req, res) => {
 });
 
 // 🔄 REFRESH TOKEN
-router.post("/refresh", async (req, res) => {
-  console.log("🔄 Incoming /refresh request:", req.body);
+app.post("/register", async (req, res) => {
+  const { nickname } = req.body;
+  console.log("📨 Incoming /register request:", nickname);
 
   try {
-    const { refreshToken } = req.body;
+    console.log("🔌 Attempting DB connection...");
+    const result = await pool.query("SELECT NOW()");
+    console.log("✅ DB connection successful:", result.rows[0]);
 
-    if (!refreshToken) {
-      console.warn("⚠️ Missing refresh token");
-      return res.status(400).json({ error: "Refresh token required" });
-    }
-
-    const { rows: players } = await pool.query(
-      "SELECT * FROM players WHERE refresh_token = $1",
-      [refreshToken]
-    );
-    const player = players[0];
-
-    if (!player) {
-      console.warn("⚠️ Invalid refresh token:", refreshToken);
-      return res.status(403).json({ error: "Invalid refresh token" });
-    }
-
-    const newAccessToken = generateAccessToken(player.nickname);
-    const newRefreshToken = uuidv4();
-
-    await pool.query(
-      "UPDATE players SET refresh_token = $1 WHERE nickname = $2",
-      [newRefreshToken, player.nickname]
-    );
-
-    console.log("✅ Token refreshed for:", player.nickname);
-
-    res.json({ token: newAccessToken, refreshToken: newRefreshToken });
+    // Aquí iría tu lógica de registro
+    res.status(200).json({ message: "Registered successfully" });
   } catch (err) {
-    console.error("❌ Error in /refresh:", err.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("❌ DB connection error:", err);
+
+    // Log específico del certificado
+    if (err.message.includes("self-signed certificate")) {
+      console.error("🔐 SSL Error: Self-signed certificate in chain");
+    }
+
+    res
+      .status(500)
+      .json({ error: "Registration failed", details: err.message });
   }
 });
 
