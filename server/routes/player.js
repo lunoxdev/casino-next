@@ -14,43 +14,37 @@ const generateAccessToken = (nickname) => {
 };
 
 router.post("/register", async (req, res) => {
-  try {
-    let { nickname } = req.body;
+  console.log("📨 Incoming register request:", req.body);
 
-    if (!nickname || typeof nickname !== "string") {
+  try {
+    const { nickname } = req.body;
+
+    if (!nickname) {
+      console.warn("⚠️ Missing nickname");
       return res.status(400).json({ error: "Nickname is required" });
     }
 
-    nickname = nickname.trim().toLowerCase();
-
-    if (nickname.length > 12) {
-      return res
-        .status(400)
-        .json({ error: "Nickname too long (max 12 characters)" });
-    }
-
-    const { rows: existing } = await pool.query(
-      "SELECT * FROM players WHERE nickname = $1",
-      [nickname]
+    // Aquí va tu lógica de inserción en la base de datos
+    const result = await pool.query(
+      "INSERT INTO players (nickname, balance) VALUES ($1, $2) RETURNING *",
+      [nickname, 1000]
     );
 
-    if (existing.length > 0) {
-      return res.status(409).json({ error: "Nickname already taken" });
-    }
+    console.log("✅ Player registered:", result.rows[0]);
 
-    const uuid = uuidv4();
-    const refreshToken = uuidv4();
-    const accessToken = generateAccessToken(nickname);
+    // Generar token, refreshToken, etc.
+    const token = generateToken(result.rows[0]);
+    const refreshToken = generateRefreshToken(result.rows[0]);
 
-    await pool.query(
-      "INSERT INTO players (nickname, balance, uuid, refresh_token) VALUES ($1, $2, $3, $4)",
-      [nickname, 1000, uuid, refreshToken]
-    );
-
-    res.json({ nickname, balance: 1000, token: accessToken, refreshToken });
+    res.json({
+      nickname: result.rows[0].nickname,
+      balance: result.rows[0].balance,
+      token,
+      refreshToken,
+    });
   } catch (err) {
     console.error("❌ Error en /register:", err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
