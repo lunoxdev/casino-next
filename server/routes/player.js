@@ -28,7 +28,7 @@ router.post("/register", async (req, res) => {
     }
 
     const { data: existing, error: findError } = await supabase
-      .from("players")
+      .from("me")
       .select("*")
       .eq("nickname", nickname);
 
@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
     const accessToken = generateAccessToken(nickname);
 
     const { error: insertError } = await supabase
-      .from("players")
+      .from("me")
       .insert([{ nickname, balance: 1000, uuid, refresh_token: refreshToken }]);
 
     if (insertError) throw insertError;
