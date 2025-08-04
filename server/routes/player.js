@@ -1,5 +1,5 @@
 import express from "express";
-import supabase from "../lib/supabase.js";
+import supabase from "../db/db";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
