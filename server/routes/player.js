@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
 
 const generateAccessToken = (nickname) => {
   return jwt.sign({ nickname }, JWT_SECRET, { expiresIn: "1d" });
