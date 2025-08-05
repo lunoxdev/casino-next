@@ -30,7 +30,6 @@ export default function SignUp() {
 
     try {
       await register(trimmedNickname);
-      console.log("✅ Registered successfully");
       setMessage("");
     } catch (err) {
       console.warn("⚠️ Register failed:", err.message);
