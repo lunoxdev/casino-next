@@ -97,6 +97,12 @@ export const usePlayerStore = create(
             if (err.response?.status === 404) {
               throw new Error("⚠️ Nickname not found");
             }
+
+            // Usa el mensaje del backend si existe
+            if (err.response?.data?.error) {
+              throw new Error(`❌ ${err.response.data.error}`);
+            }
+
             throw new Error("❌ Login failed. Try again.");
           }
         },
