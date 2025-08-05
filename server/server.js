@@ -17,9 +17,7 @@ app.use(express.json());
 app.use("/api/playerAuth", authRoutes);
 
 app.get("/", (req, res) => {
-  res.send(
-    "<h1>Backend is running and ready to accept socket connections!</h1>"
-  );
+  res.send("<h1>Backend ready!</h1>");
 });
 
 // Sockets
