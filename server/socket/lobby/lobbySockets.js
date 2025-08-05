@@ -2,13 +2,13 @@ import {
   addPlayer,
   removePlayer,
   getPlayersList,
-} from "../state/playersStore.js";
+} from "../../state/playersStore.js";
 import {
   createRoom,
   getRoomPlayers,
   getAllRooms,
   matchRooms,
-} from "../state/matchRooms.js";
+} from "../../state/matchRooms.js";
 
 export default function lobbySockets(socket, io) {
   socket.on("playerJoined", (playerData) => {

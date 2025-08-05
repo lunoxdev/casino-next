@@ -1,4 +1,4 @@
-import { players } from "../state/playersStore.js";
+import { players } from "../../state/playersStore.js";
 
 export default function matchSockets(socket, io) {
   socket.on("startMatch", () => {
