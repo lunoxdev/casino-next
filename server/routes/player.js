@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
       .select("*")
       .eq("nickname", nickname);
 
-    const player = players[0];
+    let player = players[0];
 
     if (!player) {
       return res.status(404).json({ error: "Nickname not found" });
