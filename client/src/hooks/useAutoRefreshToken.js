@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { usePlayerStore } from "../stores/usePlayerStore";
 
-const REFRESH_OFFSET_MS = 20 * 1000;
+const REFRESH_OFFSET_MS = 60 * 60 * 1000; // 1 hour before expiration
 
 const getRefreshTime = (token) => {
   try {

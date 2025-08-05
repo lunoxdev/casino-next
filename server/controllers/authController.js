@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
 
 const generateAccessToken = (nickname) => {
-  return jwt.sign({ nickname }, JWT_SECRET, { expiresIn: "40s" });
+  return jwt.sign({ nickname }, JWT_SECRET, { expiresIn: "1d" });
 };
 
 export async function register(req, res) {
