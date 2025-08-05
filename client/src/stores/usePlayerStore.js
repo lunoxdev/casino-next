@@ -17,7 +17,9 @@ export const usePlayerStore = create(
         register: async (nickname) => {
           console.log("📨 Attempting to register nickname:", nickname);
           try {
-            const res = await axios.post("/api/player/register", { nickname });
+            const res = await axios.post("/api/playerAuth/register", {
+              nickname,
+            });
             console.log("✅ Registration response:", res.data);
 
             const {
@@ -49,7 +51,7 @@ export const usePlayerStore = create(
             const currentRefreshToken = get().refreshToken;
             if (!currentRefreshToken) return;
 
-            const res = await axios.post("/api/player/refresh", {
+            const res = await axios.post("/api/playerAuth/refresh", {
               refreshToken: currentRefreshToken,
             });
             const { token: newToken, refreshToken: newRefreshToken } = res.data;
@@ -74,7 +76,7 @@ export const usePlayerStore = create(
         login: async (nickname) => {
           console.log("📨 Attempting to login with nickname:", nickname);
           try {
-            const res = await axios.post("/api/player/login", { nickname });
+            const res = await axios.post("/api/playerAuth/login", { nickname });
             console.log("✅ Login response:", res.data);
 
             const {
