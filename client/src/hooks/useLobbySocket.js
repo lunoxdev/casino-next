@@ -1,12 +1,12 @@
 import { useEffect, useCallback } from "react";
-import { usePlayerStore } from "../stores/usePlayerStore";
+import { useAuthStore } from "../stores/useAuthStore";
 import { useRoomsStore } from "../stores/useRoomsStore";
 import socket from "../socket";
 
 let listenersInitialized = false;
 
 export const useLobbySocket = ({ setPlayers }) => {
-  const { name, balance, token, registered, setBalance } = usePlayerStore();
+  const { name, balance, token, registered, setBalance } = useAuthStore();
   const { setMyRoom, setRoomPlayers, setAvailableRooms } = useRoomsStore();
 
   const rejoin = useCallback(() => {

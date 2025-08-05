@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
 
-export const usePlayerStore = create(
+export const useAuthStore = create(
   devtools(
     persist(
       (set, get) => ({

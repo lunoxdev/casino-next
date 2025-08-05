@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { usePlayerStore } from "../stores/usePlayerStore";
+import { useAuthStore } from "../stores/useAuthStore";
 import { useRoomsStore } from "../stores/useRoomsStore";
 import { useLobbySocket } from "../hooks/useLobbySocket";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { useAutoRefreshToken } from "../hooks/useAutoRefreshToken";
 
 const Lobby = () => {
   const navigate = useNavigate();
-  const { nickname, balance, registered, token, logOut } = usePlayerStore();
+  const { nickname, balance, registered, token, logOut } = useAuthStore();
   const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
   const { roomId, roomPlayers, gameName } = myRoom;
 

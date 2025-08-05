@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { usePlayerStore } from "../stores/usePlayerStore";
+import { useAuthStore } from "../stores/useAuthStore";
 import socket from "../socket";
 
 const Match = () => {
-  const { name, balance, setBalance, token, registered } = usePlayerStore();
+  const { name, balance, setBalance, token, registered } = useAuthStore();
   const [players, setPlayers] = useState([]);
   const [spinMessages, setSpinMessages] = useState({});
   const [showButton, setShowButton] = useState(true);

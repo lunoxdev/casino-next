@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { usePlayerStore } from "../stores/usePlayerStore";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const REFRESH_OFFSET_MS = 60 * 60 * 1000; // 1 hour before expiration
 
@@ -20,8 +20,8 @@ const getRefreshTime = (token) => {
 };
 
 export const useAutoRefreshToken = () => {
-  const token = usePlayerStore((state) => state.token);
-  const refreshAccessToken = usePlayerStore(
+  const token = useAuthStore((state) => state.token);
+  const refreshAccessToken = useAuthStore(
     (state) => state.refreshAccessToken
   );
 

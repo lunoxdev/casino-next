@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { usePlayerStore } from "../stores/usePlayerStore";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function SignUp() {
   const [inputNickname, setInputNickname] = useState("");
-  const register = usePlayerStore((state) => state.register);
-  const login = usePlayerStore((state) => state.login);
+  const register = useAuthStore((state) => state.register);
+  const login = useAuthStore((state) => state.login);
   const [message, setMessage] = useState("");
 
   const handleSubmit = async () => {
