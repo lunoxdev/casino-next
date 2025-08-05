@@ -37,10 +37,9 @@ export default function SignUp() {
       if (err.message.includes("already taken")) {
         try {
           await login(trimmedNickname);
-          console.log("✅ Logged in after nickname conflict");
           setMessage("");
         } catch (loginErr) {
-          console.warn("⚠️ Login after conflict failed:", loginErr.message);
+          console.warn("⚠️ Login failed:", loginErr.message);
           setMessage(loginErr.message);
         }
       } else {

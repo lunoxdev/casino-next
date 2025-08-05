@@ -5,7 +5,7 @@ import { useLobbySocket } from "../hooks/useLobbySocket";
 import { useNavigate } from "react-router-dom";
 import SignUp from "../components/SignUp";
 import socket from "../socket";
-import { useAuthRefresh } from "../hooks/useAuthRefresh";
+import { useAutoRefreshToken } from "../hooks/useAutoRefreshToken";
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Lobby = () => {
   const { roomId, roomPlayers, gameName } = myRoom;
 
   const [players, setPlayers] = useState([]);
-  useAuthRefresh();
+  useAutoRefreshToken();
   useLobbySocket({ setPlayers });
 
   const handleLogOut = () => {
