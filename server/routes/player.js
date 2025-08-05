@@ -74,16 +74,13 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Nickname is required" });
     }
 
-    // Trim and lowercase nickname to sanitize input
-    nickname = nickname.trim().toLowerCase();
-
     // Search for the player in the players table
     const { data: players } = await supabase
       .from("players")
       .select("*")
       .eq("nickname", nickname);
 
-    let player = players[0];
+    const player = players[0];
 
     if (!player) {
       return res.status(404).json({ error: "Nickname not found" });
