@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
 
     // Check if nickname is already taken
     const { data: existing, error: findError } = await supabase
-      .from("me")
+      .from("players")
       .select("*")
       .eq("nickname", nickname);
 
@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
 
     // Insert the player into the database
     const { error: insertError } = await supabase
-      .from("me")
+      .from("players")
       .insert([{ nickname, balance: 1000, uuid, refresh_token: refreshToken }]);
 
     if (insertError) throw insertError;
@@ -62,6 +62,52 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     console.error("❌ Error in /register:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { nickname } = req.body;
+
+    // Validate nickname
+    if (!nickname || typeof nickname !== "string") {
+      return res.status(400).json({ error: "Nickname is required" });
+    }
+
+    // Trim and lowercase nickname to sanitize input
+    nickname = nickname.trim().toLowerCase();
+
+    // Search for the player in the players table
+    const { data: players } = await supabase
+      .from("players")
+      .select("*")
+      .eq("nickname", nickname);
+
+    const player = players[0];
+
+    if (!player) {
+      return res.status(404).json({ error: "Nickname not found" });
+    }
+
+    // Generate new refresh token
+    const accessToken = generateAccessToken(player.nickname);
+    const newRefreshToken = uuidv4();
+
+    // Update players table supabase
+    await supabase
+      .from("players")
+      .update({ refresh_token: newRefreshToken })
+      .eq("nickname", player.nickname);
+
+    res.json({
+      nickname: player.nickname,
+      balance: player.balance,
+      token: accessToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (err) {
+    console.error("❌ Error en /login:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
