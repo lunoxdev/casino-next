@@ -101,3 +101,45 @@ export async function login(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export async function refresh(req, res) {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({ error: "Refresh token required" });
+    }
+
+    // Search for the player in the players table
+    const { data: players, error: findError } = await supabase
+      .from("players")
+      .select("*")
+      .eq("refresh_token", refreshToken);
+
+    if (findError) throw findError;
+
+    const player = players[0];
+
+    if (!player) {
+      return res.status(403).json({ error: "Invalid refresh token" });
+    }
+
+    // Generate new refresh token
+    const newAccessToken = generateAccessToken(player.nickname);
+    const newRefreshToken = uuidv4();
+
+    // Update players table supabase
+    const { error: updateError } = await supabase
+      .from("players")
+      .update({ refresh_token: newRefreshToken })
+      .eq("nickname", player.nickname);
+
+    if (updateError) throw updateError;
+
+    // Return new access token and refresh token
+    res.json({ token: newAccessToken, refreshToken: newRefreshToken });
+  } catch (err) {
+    console.error("❌ Error en /refresh:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
