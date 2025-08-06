@@ -9,7 +9,7 @@ export const useAuthStore = create(
         nickname: "",
         balance: 0,
         uuid: "",
-        refreshToken: "",
+        token: "",
         registered: false,
 
         setBalance: (newBalance) => set({ balance: newBalance }),
@@ -20,18 +20,13 @@ export const useAuthStore = create(
               nickname,
             });
 
-            const {
-              nickname: playerNickname,
-              balance,
-              uuid,
-              refreshToken,
-            } = res.data;
+            const { nickname: playerNickname, balance, uuid, token } = res.data;
 
             set({
               nickname: playerNickname,
               balance,
               uuid,
-              refreshToken,
+              token,
               registered: true,
             });
           } catch (err) {
@@ -50,12 +45,8 @@ export const useAuthStore = create(
             const res = await axios.post("/api/playerAuth/refresh", {
               refreshToken: currentRefreshToken,
             });
-            const { uuid: newUuid, refreshToken: newRefreshToken } = res.data;
-
-            set({
-              uuid: newUuid,
-              refreshToken: newRefreshToken,
-            });
+            const { token: newToken, uuid: newUuid } = res.data;
+            set({ token: newToken, uuid: newUuid });
           } catch (err) {
             console.error("Error renewing session:", err);
 
@@ -63,7 +54,7 @@ export const useAuthStore = create(
               nickname: "",
               balance: 0,
               uuid: "",
-              refreshToken: "",
+              token: "",
               registered: false,
             });
           }
@@ -73,19 +64,13 @@ export const useAuthStore = create(
           console.log("📨 Attempting to login with nickname:", nickname);
           try {
             const res = await axios.post("/api/playerAuth/login", { nickname });
-
-            const {
-              nickname: playerNickname,
-              balance,
-              uuid,
-              refreshToken,
-            } = res.data;
+            const { nickname: playerNickname, balance, uuid, token } = res.data;
 
             set({
               nickname: playerNickname,
               balance,
               uuid,
-              refreshToken,
+              token,
               registered: true,
             });
           } catch (err) {
@@ -106,14 +91,17 @@ export const useAuthStore = create(
             nickname: "",
             balance: 0,
             uuid: "",
-            refreshToken: "",
+            token: "",
             registered: false,
           });
-          localStorage.removeItem("player-storage");
+          localStorage.removeItem("__ps");
         },
       }),
       {
-        name: "player-storage",
+        name: "__ps",
+        partialize: (state) => ({
+          uuid: state.uuid,
+        }),
       }
     )
   )

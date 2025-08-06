@@ -1,6 +1,7 @@
 import supabase from "../db/supabase.js";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
+import cookie from "cookie";
 
 const JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
 
@@ -51,13 +52,23 @@ export async function register(req, res) {
 
     if (insertError) throw insertError;
 
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      })
+    );
+
     // Return the player's data
     res.json({
       nickname,
       balance: 1000,
       uuid,
       token: accessToken,
-      refreshToken,
     });
   } catch (err) {
     console.error("❌ Error in /register:", err.message);
@@ -96,12 +107,22 @@ export async function login(req, res) {
       .update({ refresh_token: newRefreshToken })
       .eq("nickname", player.nickname);
 
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      })
+    );
+
     res.json({
       nickname: player.nickname,
       balance: player.balance,
       uuid: player.uuid,
       token: accessToken,
-      refreshToken: newRefreshToken,
     });
   } catch (err) {
     console.error("❌ Error en /login:", err);
@@ -111,7 +132,8 @@ export async function login(req, res) {
 
 export async function refresh(req, res) {
   try {
-    const { refreshToken } = req.body;
+    const cookies = cookie.parse(req.headers.cookie || "");
+    const refreshToken = cookies.refreshToken;
 
     if (!refreshToken) {
       return res.status(400).json({ error: "Refresh token required" });
@@ -143,11 +165,21 @@ export async function refresh(req, res) {
 
     if (updateError) throw updateError;
 
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      })
+    );
+
     // Return new access token and refresh token
     res.json({
       uuid: player.uuid,
       token: newAccessToken,
-      refreshToken: newRefreshToken,
     });
   } catch (err) {
     console.error("❌ Error en /refresh:", err.message);

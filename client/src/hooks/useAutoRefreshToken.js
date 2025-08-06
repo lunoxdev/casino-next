@@ -12,8 +12,7 @@ const getRefreshTime = (token) => {
     const refreshTime = exp - now - REFRESH_OFFSET_MS;
 
     return refreshTime > 0 ? refreshTime : 0;
-  } catch (err) {
-    console.error(err);
+  } catch {
     return null;
   }
 };
