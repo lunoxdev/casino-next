@@ -10,7 +10,6 @@ const LobbyContent = () => {
   const handleLogOut = () => {
     socket.emit("logOut", { uuid });
     logOut();
-    localStorage.removeItem("player-storage");
   };
 
   return (

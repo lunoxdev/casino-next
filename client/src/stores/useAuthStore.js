@@ -109,6 +109,7 @@ export const useAuthStore = create(
             refreshToken: "",
             registered: false,
           });
+          localStorage.removeItem("player-storage");
         },
       }),
       {
