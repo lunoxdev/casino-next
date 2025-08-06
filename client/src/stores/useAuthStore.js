@@ -94,11 +94,11 @@ export const useAuthStore = create(
             token: "",
             registered: false,
           });
-          localStorage.removeItem("player-storage");
+          localStorage.removeItem("__ps");
         },
       }),
       {
-        name: "player-storage",
+        name: "__ps",
         partialize: (state) => ({
           nickname: state.nickname,
           balance: state.balance,
