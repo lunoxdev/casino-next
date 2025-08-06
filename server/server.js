@@ -7,33 +7,10 @@ import authRoutes from "./routes/playersAuth_test.js";
 
 const app = express();
 const server = http.createServer(app);
-
-const allowedOrigins = [
-  // "'https://pvpcasino.vercel.app",
-  "http://localhost:5173",
-];
-
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins,
-    credentials: true,
-  },
-});
+const io = new Server(server, { cors: { origin: "*" } });
 
 // Middlewares
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
-
+app.use(cors());
 app.use(express.json());
 
 // Routes
