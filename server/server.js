@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import manageSockets from "./socket/index.js";
 import authRoutes from "./routes/playerAuth.js";
+import profileRoutes from "./routes/profile.js";
 
 // App and server initialization
 const app = express();
@@ -40,6 +41,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/playerAuth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1>Backend ready!</h1>");
