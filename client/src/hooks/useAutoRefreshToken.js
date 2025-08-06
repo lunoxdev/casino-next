@@ -10,20 +10,17 @@ const getRefreshTime = (token) => {
     const exp = decoded.exp * 1000; // convert to ms
     const now = Date.now();
     const refreshTime = exp - now - REFRESH_OFFSET_MS;
-    console.log("🔄 Refresh time:", refreshTime);
 
     return refreshTime > 0 ? refreshTime : 0;
   } catch (err) {
-    console.error("Error decoding token:", err);
+    console.error(err);
     return null;
   }
 };
 
 export const useAutoRefreshToken = () => {
   const token = useAuthStore((state) => state.token);
-  const refreshAccessToken = useAuthStore(
-    (state) => state.refreshAccessToken
-  );
+  const refreshAccessToken = useAuthStore((state) => state.refreshAccessToken);
 
   useEffect(() => {
     if (!token) return;
