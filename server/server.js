@@ -5,9 +5,11 @@ import cors from "cors";
 import manageSockets from "./socket/index.js";
 import authRoutes from "./routes/playerAuth.js";
 
+// App and server initialization
 const app = express();
 const server = http.createServer(app);
 
+// CORS configuration
 const allowedOrigins = [
   "https://pvpcasino.vercel.app",
   "https://pvp-casino.fly.dev",
@@ -33,6 +35,7 @@ app.use(
   })
 );
 
+// Middlewares
 app.use(express.json());
 
 // Routes

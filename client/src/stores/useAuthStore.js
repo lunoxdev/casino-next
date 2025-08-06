@@ -100,6 +100,8 @@ export const useAuthStore = create(
       {
         name: "player-storage",
         partialize: (state) => ({
+          nickname: state.nickname,
+          balance: state.balance,
           uuid: state.uuid,
         }),
       }
