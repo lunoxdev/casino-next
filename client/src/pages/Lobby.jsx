@@ -56,7 +56,9 @@ const Lobby = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {registered ? (
+      {!registered ? (
+        <SignUp />
+      ) : (
         <>
           <h1 className="text-4xl mb-2">
             Hi,{" "}
@@ -158,8 +160,6 @@ const Lobby = () => {
             Log Out
           </button>
         </>
-      ) : (
-        <SignUp />
       )}
     </div>
   );
