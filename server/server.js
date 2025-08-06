@@ -9,8 +9,8 @@ const app = express();
 const server = http.createServer(app);
 
 const allowedOrigins = [
-  "'https://pvpcasino.vercel.app",
-  // "http://localhost:5173",
+  // "'https://pvpcasino.vercel.app",
+  "http://localhost:5173",
 ];
 
 const io = new Server(server, {
