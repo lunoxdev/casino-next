@@ -94,14 +94,11 @@ export const useAuthStore = create(
             token: "",
             registered: false,
           });
-          localStorage.removeItem("__ps");
+          localStorage.removeItem("player-storage");
         },
       }),
       {
-        name: "__ps",
-        partialize: (state) => ({
-          uuid: state.uuid,
-        }),
+        name: "player-storage",
       }
     )
   )
