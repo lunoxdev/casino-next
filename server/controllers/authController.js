@@ -52,7 +52,13 @@ export async function register(req, res) {
     if (insertError) throw insertError;
 
     // Return the player's data
-    res.json({ nickname, balance: 1000, token: accessToken, refreshToken });
+    res.json({
+      nickname,
+      balance: 1000,
+      uuid,
+      token: accessToken,
+      refreshToken,
+    });
   } catch (err) {
     console.error("❌ Error in /register:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
@@ -93,6 +99,7 @@ export async function login(req, res) {
     res.json({
       nickname: player.nickname,
       balance: player.balance,
+      uuid: player.uuid,
       token: accessToken,
       refreshToken: newRefreshToken,
     });
@@ -137,7 +144,11 @@ export async function refresh(req, res) {
     if (updateError) throw updateError;
 
     // Return new access token and refresh token
-    res.json({ token: newAccessToken, refreshToken: newRefreshToken });
+    res.json({
+      uuid: player.uuid,
+      token: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
   } catch (err) {
     console.error("❌ Error en /refresh:", err.message);
     res.status(500).json({ error: "Internal server error" });

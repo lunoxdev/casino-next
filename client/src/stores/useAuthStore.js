@@ -8,7 +8,7 @@ export const useAuthStore = create(
       (set, get) => ({
         nickname: "",
         balance: 0,
-        token: "",
+        uuid: "",
         refreshToken: "",
         registered: false,
 
@@ -25,14 +25,14 @@ export const useAuthStore = create(
             const {
               nickname: playerNickname,
               balance,
-              token,
+              uuid,
               refreshToken,
             } = res.data;
 
             set({
               nickname: playerNickname,
               balance,
-              token,
+              uuid,
               refreshToken,
               registered: true,
             });
@@ -54,19 +54,19 @@ export const useAuthStore = create(
             const res = await axios.post("/api/playerAuth/refresh", {
               refreshToken: currentRefreshToken,
             });
-            const { token: newToken, refreshToken: newRefreshToken } = res.data;
+            const { uuid: newUuid, refreshToken: newRefreshToken } = res.data;
 
             set({
-              token: newToken,
+              uuid: newUuid,
               refreshToken: newRefreshToken,
             });
           } catch (err) {
-            console.error("Error renewing token:", err);
+            console.error("Error renewing session:", err);
 
             set({
               nickname: "",
               balance: 0,
-              token: "",
+              uuid: "",
               refreshToken: "",
               registered: false,
             });
@@ -82,14 +82,14 @@ export const useAuthStore = create(
             const {
               nickname: playerNickname,
               balance,
-              token,
+              uuid,
               refreshToken,
             } = res.data;
 
             set({
               nickname: playerNickname,
               balance,
-              token,
+              uuid,
               refreshToken,
               registered: true,
             });
@@ -100,7 +100,6 @@ export const useAuthStore = create(
               throw new Error("⚠️ Nickname not found");
             }
 
-            // Usa el mensaje del backend si existe
             if (err.response?.data?.error) {
               throw new Error(`❌ ${err.response.data.error}`);
             }
@@ -113,7 +112,7 @@ export const useAuthStore = create(
           set({
             nickname: "",
             balance: 0,
-            token: "",
+            uuid: "",
             refreshToken: "",
             registered: false,
           });
