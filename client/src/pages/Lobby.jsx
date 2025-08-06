@@ -1,49 +1,13 @@
 import { useAuthStore } from "../stores/useAuthStore";
-import { useAutoRefreshToken } from "../hooks/useAutoRefreshToken";
-import SignUp from "../components/SignUp";
-import socket from "../socket";
-// import { useLobbySocket } from "../hooks/useLobbySocket";
+import AuthForm from "../components/auth/AuthForm";
+import LobbyContent from "../components/lobby/LobbyContent";
 
 const Lobby = () => {
-  const { nickname, balance, registered, uuid, logOut } = useAuthStore();
-
-  useAutoRefreshToken();
-  // useLobbySocket({ setPlayers });
-
-  const handleLogOut = () => {
-    socket.emit("logOut", { uuid });
-    logOut();
-    localStorage.removeItem("player-storage");
-  };
+  const { registered } = useAuthStore();
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {!registered ? (
-        <SignUp />
-      ) : (
-        <>
-          <h1 className="text-4xl mb-2">
-            Hi,{" "}
-            <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
-              {nickname}
-            </span>
-          </h1>
-          <p className="text-lg mb-4">
-            Your balance:{" "}
-            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 inline-block text-transparent bg-clip-text font-semibold">
-              ${balance}
-            </span>
-            {uuid}
-          </p>
-
-          <button
-            onClick={handleLogOut}
-            className="text-red-600 px-4 py-1 rounded hover:underline transition mb-4 cursor-pointer"
-          >
-            Log Out
-          </button>
-        </>
-      )}
+      {registered ? <LobbyContent /> : <AuthForm />}
     </div>
   );
 };

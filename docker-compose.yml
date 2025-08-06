@@ -28,6 +28,9 @@ services:
 
   client:
     build: ./client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     ports:
       - "5173:5173"
     command: ["pnpm", "dev"]
