@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import axios from "../api/api";
 import { useAuthStore } from "./useAuthStore";
+import axios from "../api/api";
 
 export const useProfileStore = create(
   devtools(
@@ -12,7 +12,7 @@ export const useProfileStore = create(
 
         fetchProfile: async () => {
           try {
-            const { token } = useAuthStore.getState(); 
+            const { token } = useAuthStore.getState();
             if (!token) throw new Error("Token missing");
 
             const res = await axios.get("/api/profile", {
@@ -29,7 +29,10 @@ export const useProfileStore = create(
           }
         },
 
-        clearProfile: () => set({ nickname: "", balance: 0 }),
+        clearProfile: () => {
+          set({ nickname: "", balance: 0 });
+          localStorage.removeItem("__profile");
+        },
       }),
       {
         name: "__profile",
