@@ -5,19 +5,19 @@ import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
 import socket from "../../socket";
 
 const LobbyContent = () => {
-  const { uuid, logOut } = useAuthStore();
+  const { token, logOut } = useAuthStore();
   const { nickname, balance, fetchProfile } = useProfileStore();
 
   useAutoRefreshToken();
 
   useEffect(() => {
-    if (uuid) {
-      fetchProfile(uuid);
+    if (token) {
+      fetchProfile(token);
     }
-  }, [uuid, fetchProfile]);
+  }, [token, fetchProfile]);
 
   const handleLogOut = () => {
-    socket.emit("logOut", { uuid });
+    socket.emit("logOut", { token });
     logOut();
   };
 
