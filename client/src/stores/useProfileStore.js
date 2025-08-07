@@ -6,7 +6,7 @@ import { useAuthStore } from "./useAuthStore";
 export const useProfileStore = create(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         nickname: "",
         balance: 0,
 
@@ -24,7 +24,7 @@ export const useProfileStore = create(
             });
 
             const { nickname, balance } = res.data;
-            set({ nickname, balance });
+            get().setProfile({ nickname, balance });
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
