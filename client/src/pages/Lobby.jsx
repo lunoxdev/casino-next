@@ -1,9 +1,9 @@
-import { useProfileStore } from "../stores/useProfileStore";
+import { useAuthStore } from "../stores/useAuthStore";
 import AuthForm from "../components/auth/AuthForm";
 import Profile from "../components/lobby/Profile";
 
 const Lobby = () => {
-  const { loggedIn } = useProfileStore();
+  const loggedIn = useAuthStore((state) => state.loggedIn);
 
   return (
     <div className="flex flex-col items-center justify-center">

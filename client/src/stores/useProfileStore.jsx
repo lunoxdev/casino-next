@@ -7,7 +7,6 @@ const initialProfileState = {
   nickname: "",
   balance: 0,
   uuid: "",
-  loggedIn: false,
 };
 
 export const useProfileStore = create(
@@ -28,11 +27,7 @@ export const useProfileStore = create(
             });
 
             const { nickname, balance } = res.data;
-            set(
-              { nickname, balance, uuid, loggedIn: true },
-              false,
-              "fetchProfile"
-            );
+            set({ nickname, balance, uuid }, false, "fetchProfile");
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
