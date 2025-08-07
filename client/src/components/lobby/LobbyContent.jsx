@@ -11,8 +11,9 @@ const LobbyContent = () => {
   useAutoRefreshToken();
 
   useEffect(() => {
+    console.log("🌀 useEffect - token changed:", token);
     if (token) {
-      fetchProfile(token);
+      fetchProfile();
     }
   }, [token, fetchProfile]);
 
@@ -20,6 +21,8 @@ const LobbyContent = () => {
     socket.emit("logOut", { token });
     logOut();
   };
+
+  console.log("🧾 Rendering component with:", { nickname, balance });
 
   return (
     <>
