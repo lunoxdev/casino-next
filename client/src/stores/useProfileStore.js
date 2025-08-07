@@ -6,17 +6,13 @@ import { useAuthStore } from "./useAuthStore";
 export const useProfileStore = create(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         nickname: "",
         balance: 0,
-        isRehydrated: false,
 
         fetchProfile: async () => {
-          console.log("📡 fetchProfile called");
-
           try {
-            const { token } = useAuthStore.getState();
-            console.log("🔐 Retrieved token:", token);
+            const { token } = useAuthStore.getState(); 
             if (!token) throw new Error("Token missing");
 
             const res = await axios.get("/api/profile", {
@@ -26,19 +22,14 @@ export const useProfileStore = create(
             });
 
             const { nickname, balance } = res.data;
-            console.log("✅ API response:", res.data);
-
-            set({ nickname, balance }, false, "fetchProfile");
-            console.log("🧠 Zustand store updated:", get());
+            set({ nickname, balance });
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
-            console.log("🧠 Zustand store reset:", get());
           }
         },
 
-        clearProfile: () =>
-          set({ nickname: "", balance: 0 }, false, "clearProfile"),
+        clearProfile: () => set({ nickname: "", balance: 0 }),
       }),
       {
         name: "__profile",
@@ -46,10 +37,6 @@ export const useProfileStore = create(
           nickname: state.nickname,
           balance: state.balance,
         }),
-        onRehydrateStorage: () => (_, set) => {
-          console.log("✅ Zustand profile store rehydrated");
-          set({ isRehydrated: true }, false, "rehydratedProfile");
-        },
       }
     )
   )
