@@ -1,13 +1,13 @@
 import { useAuthStore } from "../stores/useAuthStore";
 import AuthForm from "../components/auth/AuthForm";
-import LobbyContent from "../components/lobby/LobbyContent";
+import Profile from "../components/lobby/Profile";
 
 const Lobby = () => {
   const { registered } = useAuthStore();
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {registered ? <LobbyContent /> : <AuthForm />}
+      {registered ? <Profile /> : <AuthForm />}
     </div>
   );
 };

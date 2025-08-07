@@ -4,9 +4,9 @@ import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
 import { useProfileStore } from "../../stores/useProfileStore";
 import socket from "../../socket";
 
-const LobbyContent = () => {
+const Profile = () => {
   const { token, logOut } = useAuthStore();
-  const { nickname, balance, fetchProfile } = useProfileStore();
+  const { nickname, balance, fetchProfile, clearProfile } = useProfileStore();
 
   useAutoRefreshToken();
 
@@ -16,6 +16,7 @@ const LobbyContent = () => {
 
   const handleLogOut = () => {
     socket.emit("logOut", { token });
+    clearProfile();
     logOut();
   };
 
@@ -45,4 +46,4 @@ const LobbyContent = () => {
   );
 };
 
-export default LobbyContent;
+export default Profile;
