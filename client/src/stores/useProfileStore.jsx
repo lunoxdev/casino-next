@@ -9,10 +9,11 @@ export const useProfileStore = create(
       (set) => ({
         nickname: "",
         balance: 0,
+        uuid: "",
 
         fetchProfile: async () => {
           try {
-            const { token } = useAuthStore.getState();
+            const { token, uuid } = useAuthStore.getState();
             if (!token) throw new Error("Token missing");
 
             const res = await axios.get("/api/profile", {
@@ -22,7 +23,7 @@ export const useProfileStore = create(
             });
 
             const { nickname, balance } = res.data;
-            set({ nickname, balance });
+            set({ nickname, balance, uuid });
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
@@ -39,6 +40,7 @@ export const useProfileStore = create(
         partialize: (state) => ({
           nickname: state.nickname,
           balance: state.balance,
+          uuid: state.uuid,
         }),
       }
     )
