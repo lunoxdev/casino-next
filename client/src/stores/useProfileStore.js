@@ -9,18 +9,19 @@ export const useProfileStore = create(
       (set, get) => ({
         nickname: "",
         balance: 0,
+        isRehydrated: false,
 
         fetchProfile: async () => {
           console.log("📡 fetchProfile called");
 
           try {
-            const { token } = useAuthStore.getState(); // ✅ Get the token from the auth store
+            const { token } = useAuthStore.getState();
             console.log("🔐 Retrieved token:", token);
             if (!token) throw new Error("Token missing");
 
             const res = await axios.get("/api/profile", {
               headers: {
-                Authorization: `Bearer ${token}`, // ✅ Add the token to the headers
+                Authorization: `Bearer ${token}`,
               },
             });
 
@@ -44,6 +45,10 @@ export const useProfileStore = create(
           nickname: state.nickname,
           balance: state.balance,
         }),
+        onRehydrateStorage: () => (state) => {
+          console.log("✅ Zustand profile store rehydrated");
+          state.isRehydrated = true;
+        },
       }
     )
   )
