@@ -1,16 +1,22 @@
+import { useEffect } from "react";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
 import { useProfileStore } from "../../stores/useProfileStore";
-import { useLobbySocket } from "../../hooks/useLobbySocket";
 import socket from "../../socket";
 
 const LobbyContent = () => {
-  const { uuid, logOut } = useAuthStore();
-  const { nickname, balance } = useProfileStore();
+  const { uuid, token, logOut } = useAuthStore();
+  const { nickname, balance, fetchProfile } = useProfileStore();
 
   useAutoRefreshToken();
 
-  useLobbySocket();
+  console.log("valores de auth", uuid, token);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  console.log("valores de auth 2", uuid, token);
 
   const handleLogOut = () => {
     socket.emit("logOut", { uuid });
