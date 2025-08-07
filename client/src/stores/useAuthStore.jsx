@@ -69,6 +69,7 @@ export const useAuthStore = create(
           loggedIn: state.loggedIn,
         }),
       }
-    )
+    ),
+    { name: "AuthStore" }
   )
 );

@@ -42,6 +42,7 @@ export const useProfileStore = create(
       {
         name: "__profile",
       }
-    )
+    ),
+    { name: "ProfileStore" }
   )
 );
