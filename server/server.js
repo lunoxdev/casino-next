@@ -14,6 +14,7 @@ const server = http.createServer(app);
 const allowedOrigins = [
   "https://pvpcasino.vercel.app",
   "https://pvp-casino.fly.dev",
+  "http://localhost:5173",
 ];
 
 const io = new Server(server, {
