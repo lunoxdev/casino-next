@@ -8,13 +8,13 @@ export const useAuthStore = create(
       (set) => ({
         uuid: "",
         token: "",
-        registered: false,
+        loggedIn: false,
 
         login: async (nickname) => {
           try {
             const res = await axios.post("/api/playerAuth/login", { nickname });
             const { uuid, token } = res.data;
-            set({ uuid, token, registered: true });
+            set({ uuid, token, loggedIn: true });
           } catch (err) {
             if (err.response?.status === 404) {
               throw new Error("⚠️ Nickname not found");
@@ -32,7 +32,7 @@ export const useAuthStore = create(
               nickname,
             });
             const { uuid, token } = res.data;
-            set({ uuid, token, registered: true });
+            set({ uuid, token, loggedIn: true });
           } catch (err) {
             if (err.response?.status === 409) {
               throw new Error("⚠️ Nickname already taken");
@@ -45,15 +45,15 @@ export const useAuthStore = create(
           try {
             const res = await axios.post("/api/playerAuth/refresh");
             const { token, uuid } = res.data;
-            set({ token, uuid, registered: true });
+            set({ token, uuid, loggedIn: true });
           } catch (err) {
             console.error("Error renewing session:", err);
-            set({ uuid: "", token: "", registered: false });
+            set({ uuid: "", token: "", loggedIn: false });
           }
         },
 
         logOut: () => {
-          set({ uuid: "", token: "", registered: false });
+          set({ uuid: "", token: "", loggedIn: false });
           localStorage.removeItem("__auth");
         },
       }),
@@ -62,7 +62,7 @@ export const useAuthStore = create(
         partialize: (state) => ({
           uuid: state.uuid,
           token: state.token,
-          registered: state.registered,
+          loggedIn: state.loggedIn,
         }),
       }
     )

@@ -3,11 +3,11 @@ import AuthForm from "../components/auth/AuthForm";
 import Profile from "../components/lobby/Profile";
 
 const Lobby = () => {
-  const { registered } = useAuthStore();
+  const { loggedIn } = useAuthStore();
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {registered ? <Profile /> : <AuthForm />}
+      {loggedIn ? <Profile /> : <AuthForm />}
     </div>
   );
 };

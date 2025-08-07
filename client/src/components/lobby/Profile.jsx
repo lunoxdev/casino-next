@@ -1,14 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
+import { useLobbySocket } from "../../hooks/useLobbySocket";
 import { useProfileStore } from "../../stores/useProfileStore";
 import socket from "../../socket";
 
 const Profile = () => {
   const { token, logOut } = useAuthStore();
   const { nickname, balance, fetchProfile, clearProfile } = useProfileStore();
+  const [players, setPlayers] = useState([]);
 
   useAutoRefreshToken();
+  useLobbySocket({ setPlayers });
 
   useEffect(() => {
     fetchProfile();
@@ -35,6 +38,12 @@ const Profile = () => {
           ${balance}
         </span>
       </p>
+
+      <ul className="mb-4 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
+        {players.map((player, index) => (
+          <li key={index}>{player.nickname}</li>
+        ))}
+      </ul>
 
       <button
         onClick={handleLogOut}

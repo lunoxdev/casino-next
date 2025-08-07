@@ -1,20 +1,22 @@
 import { useEffect, useCallback } from "react";
 import { useAuthStore } from "../stores/useAuthStore";
+import { useProfileStore } from "../stores/useProfileStore";
 import { useRoomsStore } from "../stores/useRoomsStore";
 import socket from "../socket";
 
 let listenersInitialized = false;
 
 export const useLobbySocket = ({ setPlayers }) => {
-  const { name, balance, token, registered, setBalance } = useAuthStore();
+  const { token, loggedIn } = useAuthStore();
+  const { nickname, balance } = useProfileStore();
   const { setMyRoom, setRoomPlayers, setAvailableRooms } = useRoomsStore();
 
   const rejoin = useCallback(() => {
-    if (registered && token) {
-      socket.emit("playerJoined", { name, balance, token });
+    if (loggedIn && token) {
+      socket.emit("playerJoined", { nickname, balance, token });
       socket.emit("getRooms");
     }
-  }, [registered, token, name, balance]);
+  }, [loggedIn, token, nickname, balance]);
 
   const setupListeners = useCallback(() => {
     if (listenersInitialized) return;
@@ -24,9 +26,6 @@ export const useLobbySocket = ({ setPlayers }) => {
 
     socket.on("updatePlayers", (updatedList) => {
       setPlayers(updatedList);
-
-      const currentPlayer = updatedList.find((p) => p.token === token);
-      if (currentPlayer) setBalance(currentPlayer.balance);
     });
 
     socket.on("roomCreated", ({ roomId, gameName, player }) => {
@@ -46,9 +45,7 @@ export const useLobbySocket = ({ setPlayers }) => {
     });
   }, [
     rejoin,
-    token,
     setPlayers,
-    setBalance,
     setMyRoom,
     setAvailableRooms,
     setRoomPlayers,

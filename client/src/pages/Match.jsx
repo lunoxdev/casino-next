@@ -3,13 +3,13 @@ import { useAuthStore } from "../stores/useAuthStore";
 import socket from "../socket";
 
 const Match = () => {
-  const { name, balance, setBalance, token, registered } = useAuthStore();
+  const { name, balance, setBalance, token, loggedIn } = useAuthStore();
   const [players, setPlayers] = useState([]);
   const [spinMessages, setSpinMessages] = useState({});
   const [showButton, setShowButton] = useState(true);
 
   useEffect(() => {
-    if (registered && token) {
+    if (loggedIn && token) {
       socket.emit("startMatch");
 
       socket.emit("playerJoined", { name, balance, token }); // In case the player reload
@@ -43,7 +43,7 @@ const Match = () => {
       socket.off("matchPlayers");
       socket.off("spinResult");
     };
-  }, [registered, token, name, balance, setBalance]);
+  }, [loggedIn, token, name, balance, setBalance]);
 
   const handleSpin = () => {
     setShowButton(false);
