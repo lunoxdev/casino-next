@@ -3,17 +3,13 @@ import { devtools, persist } from "zustand/middleware";
 import { useAuthStore } from "./useAuthStore";
 import axios from "../api/api";
 
-const initialProfileState = {
-  nickname: "",
-  balance: 0,
-  uuid: "",
-};
-
 export const useProfileStore = create(
   devtools(
     persist(
       (set) => ({
-        ...initialProfileState,
+        nickname: "",
+        balance: 0,
+        uuid: "",
 
         fetchProfile: async () => {
           try {
@@ -27,7 +23,7 @@ export const useProfileStore = create(
             });
 
             const { nickname, balance } = res.data;
-            set({ nickname, balance, uuid });
+            set({ nickname, balance, uuid }, false, "fetchProfile");
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
@@ -35,14 +31,13 @@ export const useProfileStore = create(
         },
 
         clearProfile: () => {
-          set(initialProfileState);
+          set({ nickname: "", balance: 0, uuid: "" }, false, "clearProfile");
           localStorage.removeItem("__profile");
         },
       }),
       {
         name: "__profile",
       }
-    ),
-    { name: "ProfileStore" }
+    )
   )
 );

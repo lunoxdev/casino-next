@@ -2,17 +2,13 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
 
-const initialAuthState = {
-  uuid: "",
-  token: "",
-  loggedIn: false,
-};
-
 export const useAuthStore = create(
   devtools(
     persist(
       (set) => ({
-        ...initialAuthState,
+        uuid: "",
+        token: "",
+        loggedIn: false,
 
         login: async (nickname) => {
           try {
@@ -57,7 +53,7 @@ export const useAuthStore = create(
         },
 
         logOut: () => {
-          set(initialAuthState);
+          set({ uuid: "", token: "", loggedIn: false });
           localStorage.removeItem("__auth");
         },
       }),
@@ -69,7 +65,6 @@ export const useAuthStore = create(
           loggedIn: state.loggedIn,
         }),
       }
-    ),
-    { name: "AuthStore" }
+    )
   )
 );
