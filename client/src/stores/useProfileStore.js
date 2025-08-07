@@ -4,14 +4,11 @@ import axios from "../api/api";
 import { useAuthStore } from "./useAuthStore";
 
 export const useProfileStore = create(
-  persist(
-    devtools(
+  devtools(
+    persist(
       (set) => ({
         nickname: "",
         balance: 0,
-
-        setProfile: ({ nickname, balance }) =>
-          set({ nickname, balance }, false, "setProfile"),
 
         fetchProfile: async () => {
           try {
@@ -32,8 +29,7 @@ export const useProfileStore = create(
           }
         },
 
-        clearProfile: () =>
-          set({ nickname: "", balance: 0 }, false, "clearProfile"),
+        clearProfile: () => set({ nickname: "", balance: 0 }),
       }),
       {
         name: "__profile",
