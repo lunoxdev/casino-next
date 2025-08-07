@@ -4,8 +4,8 @@ import axios from "../api/api";
 import { useAuthStore } from "./useAuthStore";
 
 export const useProfileStore = create(
-  devtools(
-    persist(
+  persist(
+    devtools(
       (set) => ({
         nickname: "",
         balance: 0,
