@@ -3,13 +3,17 @@ import { devtools, persist } from "zustand/middleware";
 import { useAuthStore } from "./useAuthStore";
 import axios from "../api/api";
 
+const initialProfileState = {
+  nickname: "",
+  balance: 0,
+  uuid: "",
+};
+
 export const useProfileStore = create(
   devtools(
     persist(
       (set) => ({
-        nickname: "",
-        balance: 0,
-        uuid: "",
+        ...initialProfileState,
 
         fetchProfile: async () => {
           try {
@@ -31,7 +35,7 @@ export const useProfileStore = create(
         },
 
         clearProfile: () => {
-          set({ nickname: "", balance: 0, uuid: "" }, false, "clearProfile");
+          set(initialProfileState, false, "clearProfile");
           localStorage.removeItem("__profile");
         },
       }),
