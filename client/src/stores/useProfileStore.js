@@ -37,7 +37,8 @@ export const useProfileStore = create(
           }
         },
 
-        clearProfile: () => set({ nickname: "", balance: 0 }),
+        clearProfile: () =>
+          set({ nickname: "", balance: 0 }, false, "clearProfile"),
       }),
       {
         name: "__profile",
@@ -45,9 +46,9 @@ export const useProfileStore = create(
           nickname: state.nickname,
           balance: state.balance,
         }),
-        onRehydrateStorage: () => (state) => {
+        onRehydrateStorage: () => (_, set) => {
           console.log("✅ Zustand profile store rehydrated");
-          state.isRehydrated = true;
+          set({ isRehydrated: true }, false, "rehydratedProfile");
         },
       }
     )
