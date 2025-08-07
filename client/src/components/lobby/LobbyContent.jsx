@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useProfileStore } from "../../stores/useProfileStore";
 import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
@@ -6,23 +5,15 @@ import socket from "../../socket";
 
 const LobbyContent = () => {
   const { token, logOut } = useAuthStore();
-  const { nickname, balance, fetchProfile } = useProfileStore();
+  const { nickname, balance, clearProfile } = useProfileStore();
 
   useAutoRefreshToken();
 
-  useEffect(() => {
-    console.log("🌀 useEffect - token changed:", token);
-    if (token) {
-      fetchProfile();
-    }
-  }, [token, fetchProfile]);
-
   const handleLogOut = () => {
     socket.emit("logOut", { token });
+    clearProfile();
     logOut();
   };
-
-  console.log("🧾 Rendering component with:", { nickname, balance });
 
   return (
     <>
