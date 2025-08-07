@@ -10,7 +10,8 @@ export const useProfileStore = create(
         nickname: "",
         balance: 0,
 
-        setProfile: ({ nickname, balance }) => set({ nickname, balance }),
+        setProfile: ({ nickname, balance }) =>
+          set({ nickname, balance }, false, "setProfile"),
 
         fetchProfile: async () => {
           try {
@@ -31,7 +32,8 @@ export const useProfileStore = create(
           }
         },
 
-        clearProfile: () => set({ nickname: "", balance: 0 }),
+        clearProfile: () =>
+          set({ nickname: "", balance: 0 }, false, "clearProfile"),
       }),
       {
         name: "__profile",
