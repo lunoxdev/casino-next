@@ -27,7 +27,7 @@ export const useProfileStore = create(
             });
 
             const { nickname, balance } = res.data;
-            set({ nickname, balance, uuid }, false, "fetchProfile");
+            set({ nickname, balance, uuid });
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
@@ -35,7 +35,7 @@ export const useProfileStore = create(
         },
 
         clearProfile: () => {
-          set(initialProfileState, false, "clearProfile");
+          set(initialProfileState);
           localStorage.removeItem("__profile");
         },
       }),
