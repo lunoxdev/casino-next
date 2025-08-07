@@ -9,18 +9,25 @@ const Profile = () => {
   const { token, logOut } = useAuthStore();
   const { nickname, balance, fetchProfile, clearProfile } = useProfileStore();
   const [players, setPlayers] = useState([]);
+  const [profileLoaded, setProfileLoaded] = useState(false);
 
   useAutoRefreshToken();
-  useLobbySocket({ setPlayers });
 
   useEffect(() => {
-    fetchProfile();
+    const loadProfile = async () => {
+      await fetchProfile();
+      setProfileLoaded(true);
+    };
+    loadProfile();
   }, [fetchProfile]);
+
+  useLobbySocket({ setPlayers, enabled: profileLoaded });
 
   const handleLogOut = () => {
     socket.emit("logOut", { token });
     clearProfile();
     logOut();
+    socket.disconnect();
   };
 
   return (

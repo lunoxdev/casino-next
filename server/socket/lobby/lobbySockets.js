@@ -19,25 +19,25 @@ export default function lobbySockets(socket, io) {
     const alreadyConnected = getPlayersList().some((p) => p.token === token);
     if (!alreadyConnected) {
       addPlayer(token, playerData);
-      console.log(`🟢 Player ${playerData.name} has joined`);
+      console.log(`🟢 Player ${playerData.nickname} has joined`);
     }
 
     io.emit("updatePlayers", getPlayersList()); // ⬅️ broadcast for all players in lobby
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
-  socket.on("logOut", ({ token, name }) => {
-    if (!token || !name) return;
+  socket.on("logOut", ({ token, nickname }) => {
+    if (!token || !nickname) return;
 
     // 🔁 Search the player in the rooms
     const roomEntry = Array.from(matchRooms.entries()).find(([_, room]) =>
-      room.players.some((p) => p.token === token || p.name === name)
+      room.players.some((p) => p.token === token || p.nickname === nickname)
     );
 
     if (roomEntry) {
       const [roomId, room] = roomEntry;
       room.players = room.players.filter(
-        (p) => p.token !== token && p.name !== name
+        (p) => p.token !== token && p.nickname !== nickname
       );
 
       if (room.players.length === 0) {
@@ -55,11 +55,11 @@ export default function lobbySockets(socket, io) {
     io.emit("updatePlayers", getPlayersList()); // ⬅️ broadcast for all players in lobby
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
 
-    console.log(`🔴 Player ${name} has logged out`);
+    console.log(`🔴 Player ${nickname} has logged out`);
   });
 
-  socket.on("createRoom", ({ roomId, name, balance }) => {
-    const player = { name, balance };
+  socket.on("createRoom", ({ roomId, nickname, balance }) => {
+    const player = { nickname, balance };
     createRoom(roomId, player);
 
     const room = matchRooms.get(roomId);
@@ -79,11 +79,11 @@ export default function lobbySockets(socket, io) {
     socket.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
-  socket.on("joinRoom", ({ roomId, name, balance }) => {
+  socket.on("joinRoom", ({ roomId, nickname, balance }) => {
     const room = matchRooms.get(roomId);
     if (!room || room.players.length >= 2) return;
 
-    const newPlayer = { name, balance };
+    const newPlayer = { nickname, balance };
     room.players.push(newPlayer);
     matchRooms.set(roomId, room);
 
@@ -101,11 +101,11 @@ export default function lobbySockets(socket, io) {
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
-  socket.on("leaveRoom", ({ roomId, name }) => {
+  socket.on("leaveRoom", ({ roomId, nickname }) => {
     const room = matchRooms.get(roomId);
     if (!room) return;
 
-    room.players = room.players.filter((p) => p.name !== name);
+    room.players = room.players.filter((p) => p.nickname !== nickname);
 
     if (room.players.length === 0) {
       matchRooms.delete(roomId);

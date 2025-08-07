@@ -43,13 +43,7 @@ export const useLobbySocket = ({ setPlayers }) => {
     socket.on("joinedRoom", ({ roomId, gameName, roomPlayers }) => {
       setMyRoom(roomId, gameName, roomPlayers);
     });
-  }, [
-    rejoin,
-    setPlayers,
-    setMyRoom,
-    setAvailableRooms,
-    setRoomPlayers,
-  ]);
+  }, [rejoin, setPlayers, setMyRoom, setAvailableRooms, setRoomPlayers]);
 
   const cleanupListeners = useCallback(() => {
     socket.off("connect", rejoin);
