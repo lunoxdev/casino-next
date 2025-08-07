@@ -1,33 +1,26 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
-import { useAuthStore } from "./useAuthStore";
 
 export const useProfileStore = create(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         nickname: "",
         balance: 0,
 
         setProfile: ({ nickname, balance }) => set({ nickname, balance }),
 
-        fetchProfile: async () => {
+        fetchProfile: async (uuid, token) => {
           try {
-            const { token } = useAuthStore.getState(); // ✅ Get the token from the auth store
-            if (!token) throw new Error("Token missing");
-
+            // El token aquí puede enviarse en headers para autorizar la petición
             const res = await axios.get("/api/profile", {
-              headers: {
-                Authorization: `Bearer ${token}`, // ✅ Add the token to the headers
-              },
+              headers: { Authorization: `Bearer ${token}` },
             });
-
             const { nickname, balance } = res.data;
-            get().setProfile({ nickname, balance });
-            console.log("✅ Updated profile:", { nickname, balance });
+            set({ nickname, balance });
           } catch (err) {
-            console.error("❌ Error fetching profile:", err);
+            console.error("Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
           }
         },
