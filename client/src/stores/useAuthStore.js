@@ -61,6 +61,7 @@ export const useAuthStore = create(
         name: "__auth",
         partialize: (state) => ({
           uuid: state.uuid,
+          token: state.token,
           registered: state.registered,
         }),
       }

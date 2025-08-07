@@ -1,17 +1,13 @@
 import supabase from "../db/supabase.js";
 
 export async function getProfile(req, res) {
-  const uuid = req.query.uuid;
-
-  if (!uuid) {
-    return res.status(400).json({ error: "UUID is required" });
-  }
-
   try {
+    const nickname = req.nickname;
+
     const { data, error } = await supabase
       .from("players")
       .select("nickname, balance")
-      .eq("uuid", uuid);
+      .eq("nickname", nickname);
 
     if (error) throw error;
 

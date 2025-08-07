@@ -1,7 +1,7 @@
-// stores/useProfileStore.js
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
+import { useAuthStore } from "./useAuthStore";
 
 export const useProfileStore = create(
   devtools(
@@ -10,15 +10,17 @@ export const useProfileStore = create(
         nickname: "",
         balance: 0,
 
-        // Set profile manually
         setProfile: ({ nickname, balance }) => set({ nickname, balance }),
 
-        // Fetch profile from server (using uuid from useAuthStore)
-        fetchProfile: async (uuid) => {
+        fetchProfile: async () => {
           try {
+            const { token } = useAuthStore.getState(); // ✅ Get the token from the auth store
+            if (!token) throw new Error("Token missing");
+
             const res = await axios.get("/api/profile", {
-              params: { uuid },
-              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${token}`, // ✅ Add the token to the headers
+              },
             });
 
             const { nickname, balance } = res.data;
@@ -29,7 +31,6 @@ export const useProfileStore = create(
           }
         },
 
-        // Clear profile on logout
         clearProfile: () => set({ nickname: "", balance: 0 }),
       }),
       {
