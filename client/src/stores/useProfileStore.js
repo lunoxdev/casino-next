@@ -25,6 +25,7 @@ export const useProfileStore = create(
 
             const { nickname, balance } = res.data;
             get().setProfile({ nickname, balance });
+            console.log("✅ Updated profile:", { nickname, balance });
           } catch (err) {
             console.error("❌ Error fetching profile:", err);
             set({ nickname: "", balance: 0 });
