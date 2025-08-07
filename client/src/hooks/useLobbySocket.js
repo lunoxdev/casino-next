@@ -5,7 +5,7 @@ import socket from "../socket";
 
 let listenersInitialized = false;
 
-export const useLobbySocket = () => {
+export const useLobbySocket = ({ setPlayers }) => {
   const { name, balance, token, registered, setBalance } = useAuthStore();
   const { setMyRoom, setRoomPlayers, setAvailableRooms } = useRoomsStore();
 
@@ -23,7 +23,7 @@ export const useLobbySocket = () => {
     socket.on("connect", rejoin);
 
     socket.on("updatePlayers", (updatedList) => {
-      // setPlayers(updatedList);
+      setPlayers(updatedList);
 
       const currentPlayer = updatedList.find((p) => p.token === token);
       if (currentPlayer) setBalance(currentPlayer.balance);
@@ -47,7 +47,7 @@ export const useLobbySocket = () => {
   }, [
     rejoin,
     token,
-    // setPlayers,
+    setPlayers,
     setBalance,
     setMyRoom,
     setAvailableRooms,
