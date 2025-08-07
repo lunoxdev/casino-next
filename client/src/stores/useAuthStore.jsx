@@ -5,6 +5,7 @@ import axios from "../api/api";
 const initialAuthState = {
   uuid: "",
   token: "",
+  loggedIn: false,
 };
 
 export const useAuthStore = create(
@@ -17,7 +18,7 @@ export const useAuthStore = create(
           try {
             const res = await axios.post("/api/playerAuth/login", { nickname });
             const { uuid, token } = res.data;
-            set({ uuid, token });
+            set({ uuid, token, loggedIn: true });
           } catch (err) {
             if (err.response?.status === 404) {
               throw new Error("⚠️ Nickname not found");
@@ -35,7 +36,7 @@ export const useAuthStore = create(
               nickname,
             });
             const { uuid, token } = res.data;
-            set({ uuid, token });
+            set({ uuid, token, loggedIn: true });
           } catch (err) {
             if (err.response?.status === 409) {
               throw new Error("⚠️ Nickname already taken");
@@ -48,10 +49,10 @@ export const useAuthStore = create(
           try {
             const res = await axios.post("/api/playerAuth/refresh");
             const { token, uuid } = res.data;
-            set({ token, uuid });
+            set({ token, uuid, loggedIn: true });
           } catch (err) {
             console.error("Error renewing session:", err);
-            set({ uuid: "", token: "" });
+            set({ uuid: "", token: "", loggedIn: false });
           }
         },
 
@@ -65,6 +66,7 @@ export const useAuthStore = create(
         partialize: (state) => ({
           uuid: state.uuid,
           token: state.token,
+          loggedIn: state.loggedIn,
         }),
       }
     )
