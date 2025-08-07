@@ -1,6 +1,7 @@
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
 import { useProfileStore } from "../../stores/useProfileStore";
+import { useLobbySocket } from "../../hooks/useLobbySocket";
 import socket from "../../socket";
 
 const LobbyContent = () => {
@@ -8,6 +9,8 @@ const LobbyContent = () => {
   const { nickname, balance } = useProfileStore();
 
   useAutoRefreshToken();
+
+  useLobbySocket();
 
   const handleLogOut = () => {
     socket.emit("logOut", { uuid });
