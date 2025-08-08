@@ -27,7 +27,6 @@ const Profile = () => {
     socket.emit("logOut", { uuid });
     clearProfile();
     logOut();
-    socket.disconnect();
   };
 
   return (
