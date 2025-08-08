@@ -34,7 +34,10 @@ export const useRoomsStore = create(
         setAvailableRooms: (rooms) => set({ availableRooms: rooms }),
 
         // Reset
-        clearRoom: () => set(initialRoomsState, false, "clearRoom"),
+        clearRoom: () => {
+          set(initialRoomsState, false, "clearRoom");
+          localStorage.removeItem("__rooms");
+        },
       }),
       {
         name: "__rooms",
