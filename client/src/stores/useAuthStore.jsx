@@ -57,7 +57,7 @@ export const useAuthStore = create(
         },
 
         logOut: () => {
-          set(initialAuthState);
+          set(initialAuthState, false, "logOut");
           localStorage.removeItem("__auth");
         },
       }),
