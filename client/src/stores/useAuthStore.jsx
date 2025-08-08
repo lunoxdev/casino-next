@@ -2,13 +2,17 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
 
+const initialAuthState = {
+  uuid: "",
+  token: "",
+  loggedIn: false,
+};
+
 export const useAuthStore = create(
   devtools(
     persist(
       (set) => ({
-        uuid: "",
-        token: "",
-        loggedIn: false,
+        ...initialAuthState,
 
         login: async (nickname) => {
           try {
@@ -48,22 +52,17 @@ export const useAuthStore = create(
             set({ token, uuid, loggedIn: true });
           } catch (err) {
             console.error("Error renewing session:", err);
-            set({ uuid: "", token: "", loggedIn: false });
+            set(initialAuthState);
           }
         },
 
         logOut: () => {
-          set({ uuid: "", token: "", loggedIn: false });
+          set(initialAuthState);
           localStorage.removeItem("__auth");
         },
       }),
       {
         name: "__auth",
-        partialize: (state) => ({
-          uuid: state.uuid,
-          token: state.token,
-          loggedIn: state.loggedIn,
-        }),
       }
     )
   )
