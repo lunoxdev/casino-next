@@ -1,14 +1,14 @@
-import { players } from "../../state/playersStore.js";
+import { playersList } from "../../state/playersStore.js";
 
 export default function matchSockets(socket, io) {
   socket.on("startMatch", () => {
     // Emit player list to all players
-    const list = Array.from(players.values());
+    const list = Array.from(playersList.values());
     socket.emit("matchPlayers", list);
   });
 
   socket.on("spin", ({ token }) => {
-    const player = players.get(token);
+    const player = playersList.get(token);
     if (!player) return;
 
     const wonSomething = Math.random() < 0.8;
@@ -25,9 +25,9 @@ export default function matchSockets(socket, io) {
 
       setTimeout(() => {
         player.balance += amount;
-        players.set(token, player);
+        playersList.set(token, player);
 
-        io.emit("matchPlayers", Array.from(players.values()));
+        io.emit("matchPlayers", Array.from(playersList.values()));
       }, 3000);
     }
   });
