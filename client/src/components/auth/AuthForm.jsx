@@ -70,7 +70,7 @@ const AuthForm = () => {
       </button>
 
       <p
-        className="mt-2 text-sm cursor-pointer text-blue-600 hover:underline text-center"
+        className="text-sm cursor-pointer bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text"
         onClick={() => setMode(mode === "login" ? "register" : "login")}
       >
         {mode === "login"
