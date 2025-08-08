@@ -6,7 +6,7 @@ import { useProfileStore } from "../../stores/useProfileStore";
 import socket from "../../socket";
 
 const Profile = () => {
-  const { token, logOut } = useAuthStore();
+  const { uuid, logOut } = useAuthStore.getState();
   const { nickname, balance, fetchProfile, clearProfile } = useProfileStore();
   const [players, setPlayers] = useState([]);
   const [profileLoaded, setProfileLoaded] = useState(false);
@@ -24,7 +24,7 @@ const Profile = () => {
   useLobbySocket({ setPlayers, enabled: profileLoaded });
 
   const handleLogOut = () => {
-    socket.emit("logOut", { token });
+    socket.emit("logOut", { uuid });
     clearProfile();
     logOut();
     socket.disconnect();

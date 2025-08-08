@@ -7,16 +7,16 @@ import socket from "../socket";
 let listenersInitialized = false;
 
 export const useLobbySocket = ({ setPlayers }) => {
-  const { token, loggedIn } = useAuthStore();
+  const { uuid } = useAuthStore.getState();
   const { nickname, balance } = useProfileStore();
   const { setMyRoom, setRoomPlayers, setAvailableRooms } = useRoomsStore();
 
   const rejoin = useCallback(() => {
-    if (loggedIn && token) {
-      socket.emit("playerJoined", { nickname, balance, token });
+    if (uuid && nickname) {
+      socket.emit("playerJoined", { uuid, nickname, balance });
       socket.emit("getRooms");
     }
-  }, [loggedIn, token, nickname, balance]);
+  }, [uuid, nickname, balance]);
 
   const setupListeners = useCallback(() => {
     if (listenersInitialized) return;

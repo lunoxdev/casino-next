@@ -12,22 +12,25 @@ import {
 
 export default function lobbySockets(socket, io) {
   socket.on("playerJoined", (playerData) => {
-    // ⚠️ Change this when Auth is implemented
-    const { token } = playerData;
-    if (!token) return;
+    const { uuid, nickname, balance } = playerData;
 
-    const alreadyConnected = getPlayersList().some((p) => p.token === token);
+    if (!uuid || !nickname) return;
+
+    const alreadyConnected = getPlayersList().some(
+      (p) => p.uuid === uuid || p.nickname === nickname
+    );
+
     if (!alreadyConnected) {
-      addPlayer(token, playerData);
-      console.log(`🟢 Player ${playerData.nickname} has joined`);
+      addPlayer(uuid, { uuid, nickname, balance });
+      console.log(`🟢 Player ${nickname} has joined the lobby`);
     }
 
     io.emit("updatePlayers", getPlayersList()); // ⬅️ broadcast for all players in lobby
     io.emit("roomListUpdated", getAllRooms()); // ⬅️ broadcast for all players in lobby
   });
 
-  socket.on("logOut", ({ token, nickname }) => {
-    if (!token || !nickname) return;
+  socket.on("logOut", ({ uuid }) => {
+    if (!uuid) return;
 
     // 🔁 Search the player in the rooms
     const roomEntry = Array.from(matchRooms.entries()).find(([_, room]) =>
