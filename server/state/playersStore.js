@@ -2,12 +2,12 @@
 // This file is used to keep track of players and their balances
 export const players = new Map();
 
-export const addPlayer = (token, playerData) => {
-  players.set(token, playerData);
+export const addPlayer = (uuid, playerData) => {
+  players.set(uuid, playerData);
 };
 
-export const removePlayer = (token) => {
-  players.delete(token);
+export const removePlayer = (uuid) => {
+  players.delete(uuid);
 };
 
 export const getPlayersList = () => {
