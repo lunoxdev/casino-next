@@ -83,13 +83,13 @@ const Profile = () => {
         </span>
       </p>
 
+      <p className="font-bold text-lg">Players connected:</p>
       <ul className="mb-4 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
         {players.map((player, index) => (
           <li key={index}>{player.nickname}</li>
         ))}
       </ul>
 
-      <p className="font-bold text-lg">My Room:</p>
       {roomId && (
         <div className="flex flex-col border border-sky-200/30 rounded-md px-6 py-2 my-2">
           <p>{gameName}</p>
