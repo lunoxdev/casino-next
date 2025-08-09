@@ -7,10 +7,10 @@ const Lobby = () => {
   const loggedIn = useAuthStore((state) => state.loggedIn);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <>
       <Background />
       {loggedIn ? <Profile /> : <AuthForm />}
-    </div>
+    </>
   );
 };
 
