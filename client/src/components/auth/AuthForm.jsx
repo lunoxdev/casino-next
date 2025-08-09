@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../../stores/useAuthStore";
+import { InputLightEffect } from "../common/inputLightEffect";
+import clsx from "clsx";
 
 const AuthForm = () => {
   const { login, register } = useAuthStore();
@@ -48,14 +50,9 @@ const AuthForm = () => {
         </span>
       </h1>
 
-      <input
-        type="text"
-        name="nickname"
+      <InputLightEffect
         value={nickname}
         onChange={(e) => setNickname(e.target.value.replace(/\s/g, ""))}
-        placeholder="Enter nickname"
-        maxLength={12}
-        className="border border-sky-200/30 hover:border-sky-600/80 p-2 mb-4 rounded-md text-center"
       />
 
       {error && (
@@ -63,8 +60,12 @@ const AuthForm = () => {
       )}
 
       <button
+        disabled={!nickname}
         onClick={handleSubmit}
-        className="bg-linear-to-r from-sky-600 to-sky-700 hover:opacity-80 px-4 py-1 rounded transition mb-4 cursor-pointer"
+        className={clsx(
+          "bg-linear-to-r from-sky-600 to-sky-700 px-4 py-1 rounded transition mb-4",
+          !nickname ? "opacity-50" : "cursor-pointer hover:opacity-80"
+        )}
       >
         {mode === "login" ? "Login" : "Register"}
       </button>
