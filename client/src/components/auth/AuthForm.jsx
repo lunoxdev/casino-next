@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthStore } from "../../stores/useAuthStore";
-import { InputLightEffect } from "../common/inputLightEffect";
+import { InputLightEffect } from "../common/InputLightEffect";
 import clsx from "clsx";
 
 const AuthForm = () => {
