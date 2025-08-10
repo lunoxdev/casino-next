@@ -4,7 +4,7 @@ const ProfileFooter = ({ handleCreateRoom, roomId }) => {
       {!roomId && (
         <button
           onClick={handleCreateRoom}
-          className="w-1/6 bg-lime-600 px-4 py-1 rounded hover:bg-lime-700 transition cursor-pointer"
+          className="w-1/6 bg-linear-to-r from-lime-600/30 via-lime-700 to-lime-600/30 hover:bg-lime-700 px-4 py-2 rounded transition cursor-pointer"
         >
           Create Room
         </button>

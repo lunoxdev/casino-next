@@ -28,7 +28,7 @@ const ProfileHeader = ({ nickname, balance, players, handleLogOut }) => {
         {/* Avatar */}
         <button
           onClick={handleAvatarClick}
-          className="relative h-16 w-16 overflow-hidden rounded-sm border border-gray-800 backdrop-blur-3xl hover:opacity-80 duration-300 cursor-pointer hover:scale-110 transition-transform"
+          className="relative h-16 w-16 overflow-hidden rounded-sm border border-gray-800 backdrop-blur-3xl hover:opacity-80 duration-300 cursor-pointer hover:scale-105 transition-transform"
         >
           <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#1447e6_0%,#00a6f4_50%,#1447e6_100%)]" />
           <img
