@@ -67,6 +67,7 @@ const Match = () => {
       {/* Game iFrame */}
       <iframe
         title="Gate of Olympus"
+        allowFullScreen="false"
         // src="https://example.com"
         src="https://demogamesfree.eotofjxixi.net/gs2c/openGame.do?gameSymbol=vs20olympgold&amp;lang=en&amp;cur=USD&amp;lobbyUrl=https://stake.com/casino/home&amp;cashierUrl=https://stake.com/casino/home?tab=deposit&amp;currency=btc&amp;modal=wallet&amp;stylename=rare_stake&amp;jurisdiction=99&amp;treq=m618tX112Qn6xBt1hupM1AS4H9vMQAV2qqJFuZdSWhtIwbtSYw3DCji6YLGkQYCP&amp;isGameUrlApiCalled=true&amp;userId=demo"
         className="w-[540px] lg:w-[980px] aspect-video mb-1 rounded-sm block"
