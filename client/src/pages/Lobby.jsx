@@ -1,6 +1,6 @@
 import { useAuthStore } from "../stores/useAuthStore";
 import AuthForm from "../components/auth/AuthForm";
-import Profile from "../components/lobby/Profile";
+import LobbyHome from "../components/lobby/LobbyHome";
 import Background from "../components/common/Background";
 
 const Lobby = () => {
@@ -9,7 +9,7 @@ const Lobby = () => {
   return (
     <>
       <Background />
-      {loggedIn ? <Profile /> : <AuthForm />}
+      {loggedIn ? <LobbyHome /> : <AuthForm />}
     </>
   );
 };
