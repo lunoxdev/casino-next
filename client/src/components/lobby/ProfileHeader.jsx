@@ -51,7 +51,7 @@ const ProfileHeader = ({ nickname, balance, players, handleLogOut }) => {
           </span>
         </p>
 
-        <button className="font-semibold bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-transparent bg-clip-text hover:opacity-80 transition-opacity flex items-start gap-1">
+        <button className="font-semibold bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-transparent bg-clip-text hover:opacity-80 transition-opacity flex items-start gap-1 cursor-pointer">
           ${balance}
           <span className="text-lime-500 font-bold text-xl -mt-1">+</span>
         </button>
