@@ -1,13 +1,6 @@
-const ProfileFooter = ({ handleLogOut, handleCreateRoom, roomId }) => {
+const ProfileFooter = ({ handleCreateRoom, roomId }) => {
   return (
-    <section className="flex justify-between items-end">
-      <button
-        onClick={handleLogOut}
-        className="text-xs text-red-600 rounded hover:underline transition cursor-pointer"
-      >
-        Log Out
-      </button>
-
+    <section className="flex justify-end items-end">
       {!roomId && (
         <button
           onClick={handleCreateRoom}

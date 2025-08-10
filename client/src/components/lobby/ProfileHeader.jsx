@@ -1,11 +1,35 @@
+import { useState } from "react";
 import avatar from "../../assets/avatar.webp";
+import ModalLogOut from "../common/modal/ModalLogOut";
 
-const ProfileHeader = ({ nickname, balance, players }) => {
+const ProfileHeader = ({ nickname, balance, players, handleLogOut }) => {
+  const [showLogOut, setShowLogOut] = useState(false);
+
+  const handleAvatarClick = () => {
+    setShowLogOut((prev) => !prev);
+  };
+
+  const handleLogOutClick = () => {
+    handleLogOut();
+    setShowLogOut(false);
+  };
+
+  const handleCancel = () => {
+    setShowLogOut(false);
+  };
+
   return (
     <section className="flex justify-between">
-      {/* Avatar */}
       <div className="flex space-x-4">
-        <div className="relative h-16 w-16 overflow-hidden rounded-sm border border-gray-800 backdrop-blur-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer">
+        {showLogOut && (
+          <ModalLogOut onConfirm={handleLogOutClick} onCancel={handleCancel} />
+        )}
+
+        {/* Avatar */}
+        <button
+          onClick={handleAvatarClick}
+          className="relative h-16 w-16 overflow-hidden rounded-sm border border-gray-800 backdrop-blur-3xl hover:opacity-80 duration-300 cursor-pointer hover:scale-110 transition-transform"
+        >
           <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#1447e6_0%,#00a6f4_50%,#1447e6_100%)]" />
           <img
             src={avatar}
@@ -13,7 +37,7 @@ const ProfileHeader = ({ nickname, balance, players }) => {
             loading="eager"
             className="relative rounded-xl object-cover animate-none"
           />
-        </div>
+        </button>
         <h1 className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text font-semibold">
           {nickname}
         </h1>

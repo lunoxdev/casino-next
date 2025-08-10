@@ -74,7 +74,12 @@ const LobbyHome = () => {
   return (
     <div className="flex flex-col justify-between lg:justify-center w-4xl lg:w-3xl p-1 h-full">
       {/* Profile Header */}
-      <ProfileHeader nickname={nickname} balance={balance} players={players} />
+      <ProfileHeader
+        nickname={nickname}
+        balance={balance}
+        players={players}
+        handleLogOut={handleLogOut}
+      />
 
       <div className="grid grid-cols-2 gap-4 w-lg mx-auto my-0 lg:my-20">
         {/* Room Panel */}
@@ -96,11 +101,7 @@ const LobbyHome = () => {
       </div>
 
       {/* Footer */}
-      <LoobyFooter
-        handleLogOut={handleLogOut}
-        handleCreateRoom={handleCreateRoom}
-        roomId={roomId}
-      />
+      <LoobyFooter handleCreateRoom={handleCreateRoom} roomId={roomId} />
     </div>
   );
 };
