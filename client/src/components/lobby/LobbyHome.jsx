@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { ProfileHeader } from "./ProfileHeader";
-import { RoomPanel } from "./RoomPanel";
-import { LoobyFooter } from "./LoobyFooter";
-import { AvailableRoomsList } from "./AvailableRoomsList";
+import ProfileHeader from "./ProfileHeader";
+import RoomPanel from "./RoomPanel";
+import LoobyFooter from "./LoobyFooter";
+import AvailableRoomsList from "./AvailableRoomsList";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
 import { useLobbySocket } from "../../hooks/useLobbySocket";

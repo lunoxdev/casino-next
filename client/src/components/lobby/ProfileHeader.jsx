@@ -3,8 +3,17 @@ import avatar from "../../assets/avatar.webp";
 const ProfileHeader = ({ nickname, balance, players }) => {
   return (
     <section className="flex justify-between">
+      {/* Avatar */}
       <div className="flex space-x-4">
-        <img src={avatar} alt="avatar" className="w-16 h-16" />
+        <div className="relative h-16 w-16 overflow-hidden rounded-sm border border-gray-800 backdrop-blur-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer">
+          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#1447e6_0%,#00a6f4_50%,#1447e6_100%)]" />
+          <img
+            src={avatar}
+            alt="avatar"
+            loading="eager"
+            className="relative rounded-xl object-cover animate-none"
+          />
+        </div>
         <h1 className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text font-semibold">
           {nickname}
         </h1>
