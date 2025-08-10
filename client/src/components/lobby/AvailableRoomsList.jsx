@@ -6,7 +6,7 @@ const AvailableRoomsList = ({ availableRooms, nickname, handleJoin }) => {
         .map((room, index) => (
           <li
             key={index}
-            className="border border-sky-200/30 rounded-md px-6 py-2 my-2"
+            className="bg-gradient-to-br from-black/0 via-black/5 to-black/10 rounded-md px-6 py-2 my-2"
           >
             {room.gameName}
             <br />
