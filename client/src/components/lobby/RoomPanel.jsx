@@ -21,15 +21,24 @@ const RoomPanel = ({
       </ul>
 
       {/* Start Match Button */}
-      <button
-        onClick={handleStartMatch}
-        className={clsx(
-          "bg-linear-to-r from-lime-600/30 via-lime-700 to-lime-600/30 hover:bg-lime-700 px-4 py-1 rounded transition mt-4",
-          isDisabled ? "opacity-50 not-hover:bg-lime-700" : "cursor-pointer"
-        )}
-      >
-        {isDisabled ? "Waiting opponent..." : "Start Match"}
-      </button>
+      {isDisabled ? (
+        <p
+          className={clsx(
+            "bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text font-semibold animate-pulse mt-4"
+          )}
+        >
+          Waiting for opponent...
+        </p>
+      ) : (
+        <button
+          onClick={handleStartMatch}
+          className={clsx(
+            "bg-linear-to-r from-lime-600/30 via-lime-700 to-lime-600/30 hover:bg-lime-700 px-4 py-1 rounded transition mt-4 cursor-pointer"
+          )}
+        >
+          Start Match
+        </button>
+      )}
 
       {/* Leave Room Button */}
       <button

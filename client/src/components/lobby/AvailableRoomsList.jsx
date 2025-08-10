@@ -6,7 +6,7 @@ const AvailableRoomsList = ({ availableRooms, nickname, handleJoin }) => {
         .map((room, index) => (
           <li
             key={index}
-            className="bg-gradient-to-br from-black/0 via-black/5 to-black/10 rounded-md px-6 py-2 my-2 hover:border hover:border-lime-500 border border-transparent cursor-pointer"
+            className="bg-gradient-to-br from-black/0 via-black/5 to-black/10 rounded-md px-6 py-2 my-2 hover:border hover:border-cyan-500 border border-transparent cursor-pointer transition"
             onClick={() => handleJoin(room.roomId)}
           >
             {room.gameName}
