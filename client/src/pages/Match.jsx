@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../stores/useAuthStore";
+import { useLocation } from "react-router-dom";
 import socket from "../socket";
+
+const gameUrls = {
+  "Resurrecting Riches":
+    "https://demogamesfree.pragmaticplay.net/hub-demo/openGame.do?lang=en&cur=USD&websiteUrl=https%3A%2F%2Fclienthub.pragmaticplay.com%2F&gcpif=2831&gameSymbol=vswaysresurich&jurisdiction=99&lobbyUrl=https://clienthub.pragmaticplay.com/slots/game-library/",
+  "Gates of Olympus":
+    "https://demogamesfree.eotofjxixi.net/gs2c/openGame.do?gameSymbol=vs20olympgold&lang=en&cur=USD&lobbyUrl=https://stake.com/casino/home&cashierUrl=https://stake.com/casino/home?tab=deposit&currency=btc&modal=wallet&stylename=rare_stake&jurisdiction=99&isGameUrlApiCalled=true&userId=demo",
+  "Sugar Rush":
+    "https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?jurisdiction=99&lang=en&cur=EUR&gameSymbol=vs20sugarrushx",
+  "Wanted Dead or a Wild":
+    "https://static-live.hacksawgaming.com/1067/1.19.0/index.html?language=en&channel=desktop&gameid=1067&mode=2&token=123131&lobbyurl=https%3A%2F%2Fwww.hacksawgaming.com&currency=EUR&partner=demo&env=https://rgs-demo.hacksawgaming.com/api",
+  "Witch Heart":
+    "https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=en&cur=USD&websiteUrl=https%3A%2F%2Fclienthub.pragmaticplay.com%2F&gcpif=3482&gameSymbol=vswayswildbrst&jurisdiction=99",
+};
 
 const Match = () => {
   const { name, balance, setBalance, token, loggedIn } = useAuthStore();
@@ -8,10 +22,12 @@ const Match = () => {
   const [spinMessages, setSpinMessages] = useState({});
   const [showButton, setShowButton] = useState(true);
 
+  const location = useLocation();
+  const { gameName } = location.state;
+
   useEffect(() => {
     if (loggedIn && token) {
       socket.emit("startMatch");
-
       socket.emit("playerJoined", { name, balance, token }); // In case the player reload
     }
 
@@ -55,11 +71,11 @@ const Match = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center h-full">
       <h1 className="text-xl lg:text-4xl mb-2">
         ⚔{" "}
         <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
-          Battle
+          {gameName}
         </span>{" "}
         ⚔
       </h1>
@@ -68,8 +84,7 @@ const Match = () => {
       <iframe
         title="Gate of Olympus"
         allowFullScreen="false"
-        // src="https://example.com"
-        src="https://demogamesfree.eotofjxixi.net/gs2c/openGame.do?gameSymbol=vs20olympgold&amp;lang=en&amp;cur=USD&amp;lobbyUrl=https://stake.com/casino/home&amp;cashierUrl=https://stake.com/casino/home?tab=deposit&amp;currency=btc&amp;modal=wallet&amp;stylename=rare_stake&amp;jurisdiction=99&amp;treq=m618tX112Qn6xBt1hupM1AS4H9vMQAV2qqJFuZdSWhtIwbtSYw3DCji6YLGkQYCP&amp;isGameUrlApiCalled=true&amp;userId=demo"
+        src={gameUrls[gameName]}
         className="w-[540px] lg:w-[980px] aspect-video mb-1 rounded-sm block"
       />
 

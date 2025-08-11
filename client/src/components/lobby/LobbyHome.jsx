@@ -63,7 +63,7 @@ const LobbyHome = () => {
 
   const handleStartMatch = () => {
     if (roomPlayers.length < 2) return;
-    navigate("/match");
+    navigate("/match", { state: { gameName } });
   };
 
   const handleLeave = () => {
