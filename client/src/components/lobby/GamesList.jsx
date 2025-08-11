@@ -46,7 +46,7 @@ const GamesList = ({ handleCreateRoom, roomId }) => {
       {games.map((game, index) => (
         <div
           key={index}
-          className="flex flex-col items-center p-2 rounded-xl backdrop-blur-4xl shadow-2xl transition-transform duration-500 hover:scale-105 group-hover:opacity-40 hover:!opacity-100 cursor-pointer"
+          className="flex flex-col items-center p-2 rounded-xl backdrop-blur-4xl shadow-2xl transition-transform duration-500 hover:scale-110 group-hover:opacity-40 hover:!opacity-100 cursor-pointer"
           onMouseEnter={() => handleHover(index)}
           onMouseLeave={handleLeave}
           onClick={() => handleClick(game.name)}
