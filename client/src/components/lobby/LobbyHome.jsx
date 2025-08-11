@@ -72,7 +72,7 @@ const LobbyHome = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between lg:justify-center w-4xl lg:w-3xl p-1 h-full">
+    <div className="flex flex-col justify-between lg:justify-center w-4xl lg:w-3xl h-full">
       {/* Profile Header */}
       <ProfileHeader
         nickname={nickname}
@@ -81,16 +81,18 @@ const LobbyHome = () => {
         handleLogOut={handleLogOut}
       />
 
-      <div className="grid grid-cols-2 gap-4 w-full mx-auto my-2">
+      <div className="grid grid-cols-2 gap-4 w-full h-48 mx-auto my-2">
         {/* Room Panel */}
-        {roomId && (
-          <RoomPanel
-            gameName={gameName}
-            roomPlayers={roomPlayers}
-            handleStartMatch={handleStartMatch}
-            handleLeave={handleLeave}
-          />
-        )}
+        <div>
+          {roomId && (
+            <RoomPanel
+              gameName={gameName}
+              roomPlayers={roomPlayers}
+              handleStartMatch={handleStartMatch}
+              handleLeave={handleLeave}
+            />
+          )}
+        </div>
 
         {/* Available Rooms List */}
         <AvailableRoomsList
