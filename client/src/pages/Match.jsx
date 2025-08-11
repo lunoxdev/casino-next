@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
-import { useAuthStore } from "../stores/useAuthStore";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useAuthStore } from "../stores/useAuthStore";
+import { useProfileStore } from "../stores/useProfileStore";
+import { useRoomsStore } from "../stores/useRoomsStore";
 import socket from "../socket";
 
 const gameUrls = {
@@ -17,58 +19,19 @@ const gameUrls = {
 };
 
 const Match = () => {
-  const { name, balance, setBalance, token, loggedIn } = useAuthStore();
-  const [players, setPlayers] = useState([]);
-  const [spinMessages, setSpinMessages] = useState({});
-  const [showButton, setShowButton] = useState(true);
-
+  const { token, loggedIn } = useAuthStore();
+  const { nickname, balance } = useProfileStore();
+  const { myRoom } = useRoomsStore();
+  const { roomPlayers } = myRoom;
   const location = useLocation();
   const { gameName } = location.state;
 
   useEffect(() => {
     if (loggedIn && token) {
       socket.emit("startMatch");
-      socket.emit("playerJoined", { name, balance, token }); // In case the player reload
+      socket.emit("playerJoined", { nickname, balance, token });
     }
-
-    socket.on("matchPlayers", (list) => {
-      setPlayers(list);
-    });
-
-    socket.on("spinResult", ({ token, message, balance }) => {
-      setBalance(balance);
-
-      if (message) {
-        setTimeout(() => {
-          setSpinMessages((prev) => ({
-            ...prev,
-            [token]: message,
-          }));
-
-          setTimeout(() => {
-            setSpinMessages((prev) => ({
-              ...prev,
-              [token]: "",
-            }));
-          }, 3000);
-        }, 3000);
-      }
-    });
-
-    return () => {
-      socket.off("matchPlayers");
-      socket.off("spinResult");
-    };
-  }, [loggedIn, token, name, balance, setBalance]);
-
-  const handleSpin = () => {
-    setShowButton(false);
-    socket.emit("spin", { token });
-
-    setTimeout(() => {
-      setShowButton(true);
-    }, 3000);
-  };
+  }, [loggedIn, token, nickname, balance]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
@@ -91,17 +54,12 @@ const Match = () => {
       <div className="grid grid-cols-3 gap-4 items-center text-center text-white text-lg font-semibold">
         {/* Player */}
         <div>
-          {players[0] ? (
+          {roomPlayers && roomPlayers[0] ? (
             <>
-              {players[0] && spinMessages[players[0].token] && (
-                <p className="text-yellow-400 text-sm mt-1">
-                  {spinMessages[players[0].token]}
-                </p>
-              )}
               <p className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
-                {players[0].name}
+                {roomPlayers[0].nickname}
               </p>
-              <p className="text-sm lg:text-xl">💰 ${players[0].balance}</p>
+              <p className="text-sm lg:text-xl">💰 $1000</p>
             </>
           ) : (
             <p>Waiting for you...</p>
@@ -115,35 +73,20 @@ const Match = () => {
           </p>
         </div>
 
-        {/* Opponent */}
+        {/* Player 2 */}
         <div>
-          {players[1] ? (
+          {roomPlayers && roomPlayers[1] ? (
             <>
-              {players[1] && spinMessages[players[1].token] && (
-                <p className="text-yellow-400 text-sm mt-1">
-                  {spinMessages[players[1].token]}
-                </p>
-              )}
-              <p className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
-                {players[1].name}
+              <p className="bg-gradient-to-r from-rose-500 via-rose-400 to-rose-500 inline-block text-transparent bg-clip-text">
+                {roomPlayers[1].nickname}
               </p>
-              <p className="text-sm lg:text-xl">💰 ${players[1].balance}</p>
+              <p className="text-sm lg:text-xl">💰 $1000</p>
             </>
           ) : (
             <p>Waiting for opponent...</p>
           )}
         </div>
       </div>
-
-      {/* ⚠️ Temporal spin button */}
-      {showButton && (
-        <div className="relative">
-          <button
-            onClick={handleSpin}
-            className="border border-white/5 p-6 rounded-full transition font-bold cursor-pointer absolute bottom-0 left-52 lg:left-[250px] transform -translate-x-1.5 -translate-y-[120px] lg:-translate-y-[90px] animate-ping"
-          ></button>
-        </div>
-      )}
     </div>
   );
 };
