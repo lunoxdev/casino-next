@@ -9,7 +9,7 @@ const RoomPanel = ({
   const isDisabled = roomPlayers.length <= 1;
 
   return (
-    <section className="flex flex-col bg-gradient-to-br from-black/0 via-black/5 to-black/10 rounded-md px-6 py-2 my-2">
+    <section className="flex flex-col w-2/3 bg-gradient-to-br from-black/0 via-black/5 to-black/10 rounded-md px-6 py-2 my-2">
       {/* Game Name */}
       <p>{gameName}</p>
 

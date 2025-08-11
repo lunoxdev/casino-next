@@ -81,7 +81,7 @@ const LobbyHome = () => {
         handleLogOut={handleLogOut}
       />
 
-      <div className="grid grid-cols-2 gap-4 w-lg mx-auto my-0 lg:my-20">
+      <div className="grid grid-cols-2 gap-4 w-full mx-auto my-2">
         {/* Room Panel */}
         {roomId && (
           <RoomPanel
