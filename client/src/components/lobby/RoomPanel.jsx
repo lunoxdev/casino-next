@@ -9,12 +9,12 @@ const RoomPanel = ({
   const isDisabled = roomPlayers.length <= 1;
 
   return (
-    <section className="flex flex-col w-2/3 bg-gradient-to-br from-black/0 via-black/5 to-black/10 rounded-md px-6 py-2 my-2">
+    <section className="flex flex-col w-2/3 bg-gradient-to-br from-black/0 via-black/10 to-black/15 rounded-md px-6 py-2 my-2">
       {/* Game Name */}
       <p>{gameName}</p>
 
       {/* Players List */}
-      <ul className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
+      <ul className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 flex justify-center space-x-8 text-transparent bg-clip-text">
         {roomPlayers.map((p, index) => (
           <li key={index}>{p.nickname}</li>
         ))}
@@ -33,7 +33,7 @@ const RoomPanel = ({
         <button
           onClick={handleStartMatch}
           className={clsx(
-            "bg-linear-to-r from-lime-600/30 via-lime-700 to-lime-600/30 hover:bg-lime-700 px-4 py-1 rounded transition mt-4 cursor-pointer"
+            "bg-linear-to-r from-lime-600/30 via-lime-700 to-lime-600/30 hover:bg-lime-700 px-4 py-1 rounded transition mt-2 cursor-pointer"
           )}
         >
           Start Match

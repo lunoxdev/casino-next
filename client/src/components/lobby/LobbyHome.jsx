@@ -82,7 +82,7 @@ const LobbyHome = () => {
         handleLogOut={handleLogOut}
       />
 
-      <div className="grid grid-cols-2 gap-4 w-full h-48 mx-auto my-2">
+      <div className="grid grid-cols-2 gap-4 w-full h-44 mx-auto my-2 bg-gradient-to-br from-transparent via-sky-500/5 to-sky-600/0 shadow-sky-950/10 shadow rounded-md px-2">
         {/* Room Panel */}
         <div>
           {roomId && (
