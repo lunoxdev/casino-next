@@ -39,13 +39,14 @@ const LobbyHome = () => {
     socket.emit("logOut", { uuid });
   };
 
-  const handleCreateRoom = () => {
+  const handleCreateRoom = (gameName) => {
     const newRoomId = crypto.randomUUID();
     socket.emit("createRoom", {
       roomId: newRoomId,
       uuid,
       nickname,
       balance,
+      gameName,
     });
     setRoomId(newRoomId);
   };

@@ -64,10 +64,9 @@ export default function lobbySockets(socket, io) {
     io.emit("roomListUpdated", getAllRooms());
   });
 
-  socket.on("createRoom", ({ roomId, uuid, nickname }) => {
+  socket.on("createRoom", ({ roomId, uuid, nickname, gameName }) => {
     const player = { uuid, nickname };
-    createRoom(roomId, player);
-
+    createRoom(roomId, player, gameName);
     const room = matchRooms.get(roomId);
 
     socket.join(roomId);

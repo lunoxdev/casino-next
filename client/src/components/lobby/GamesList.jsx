@@ -14,7 +14,7 @@ const games = [
   { name: "Witch Heart", image: witchHeart },
 ];
 
-const GamesList = ({ handleCreateRoom, roomId }) => {
+const GamesList = ({ handleCreateRoom }) => {
   const videoRefs = useRef([]);
 
   const handleHover = (hoveredIndex) => {
@@ -36,9 +36,7 @@ const GamesList = ({ handleCreateRoom, roomId }) => {
   };
 
   const handleClick = (gameName) => {
-    if (handleCreateRoom) {
-      handleCreateRoom(gameName, roomId);
-    }
+    handleCreateRoom(gameName);
   };
 
   return (
