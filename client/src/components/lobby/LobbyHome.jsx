@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ProfileHeader from "./ProfileHeader";
 import RoomPanel from "./RoomPanel";
-import LoobyFooter from "./LoobyFooter";
+import GamesList from "./GamesList";
 import AvailableRoomsList from "./AvailableRoomsList";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { useAutoRefreshToken } from "../../hooks/useAutoRefreshToken";
@@ -100,8 +100,8 @@ const LobbyHome = () => {
         />
       </div>
 
-      {/* Footer */}
-      <LoobyFooter handleCreateRoom={handleCreateRoom} roomId={roomId} />
+      {/* Games List */}
+      <GamesList handleCreateRoom={handleCreateRoom} roomId={roomId} />
     </div>
   );
 };
