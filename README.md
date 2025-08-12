@@ -1,6 +1,6 @@
 # 🎰 PvP CASINO
 
-A PvP casino battle experience using slots games.
+A Real-Time Casino for play against other players.
 
 ## 🧰 Project Structure
 
