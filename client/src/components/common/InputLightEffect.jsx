@@ -28,7 +28,7 @@ export const InputLightEffect = ({ value, onChange, onEnter }) => {
   const handleKeyDown = (e) => e.key === "Enter" && onEnter?.();
 
   return (
-    <div className="relative w-1/2 mb-3">
+    <div className="relative w-full mb-3">
       <input
         ref={inputRef}
         value={value}
@@ -40,7 +40,7 @@ export const InputLightEffect = ({ value, onChange, onEnter }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         autoComplete="off"
-        placeholder="Enter nickname"
+        placeholder="Nickname"
         type="text"
         name="nickname"
         maxLength={12}

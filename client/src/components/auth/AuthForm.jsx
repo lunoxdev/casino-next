@@ -43,11 +43,8 @@ const AuthForm = () => {
 
   return (
     <section className="flex flex-col items-center justify-center h-full">
-      <h1 className="text-4xl mb-4">
-        Welcome to{" "}
-        <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
-          PVP Casino
-        </span>
+      <h1 className="text-4xl mb-4 bg-gradient-to-r from-white via-sky-300 to-sky-600 inline-block text-transparent bg-clip-text">
+        Welcome
       </h1>
 
       <InputLightEffect
@@ -63,7 +60,7 @@ const AuthForm = () => {
         disabled={!nickname}
         onClick={handleSubmit}
         className={clsx(
-          "bg-linear-to-r from-sky-600 to-sky-700 px-4 py-1 rounded transition mb-4",
+          "bg-linear-to-r from-sky-600 to-sky-700 px-4 py-1 rounded transition mb-4 mt-6",
           !nickname ? "opacity-50" : "cursor-pointer hover:opacity-80"
         )}
       >
