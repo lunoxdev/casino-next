@@ -3,11 +3,16 @@ import { useAuthStore } from "../stores/useAuthStore";
 import { useProfileStore } from "../stores/useProfileStore";
 import { useRoomsStore } from "../stores/useRoomsStore";
 import socket from "../socket";
-import { type LobbySocketOptions } from "./../types/room";
+import { type Player } from "../types/room";
+
+interface lobbySocketTypes {
+  setPlayers: (players: Player[]) => void;
+  enabled?: boolean;
+}
 
 let listenersInitialized = false;
 
-export const useLobbySocket = ({ setPlayers }: LobbySocketOptions) => {
+export const useLobbySocket = ({ setPlayers }: lobbySocketTypes) => {
   const { uuid } = useAuthStore.getState();
   const { nickname, balance } = useProfileStore();
   const { setMyRoom, setRoomPlayers, setAvailableRooms } = useRoomsStore();

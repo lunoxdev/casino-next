@@ -4,7 +4,10 @@ import gatesOfOlympus from "../../assets/games/mp4/gates-of-olympus-1000.mp4";
 import sugarRush from "../../assets/games/mp4/sugar-rush-1000.mp4";
 import wantedDeadOrWild from "../../assets/games/mp4/wanted-dead-or-a-wild.mp4";
 import witchHeart from "../../assets/games/mp4/witch-heart.mp4";
-import { type GameList } from "../../types/room";
+
+interface GameList {
+  handleCreateRoom: (gameName: string) => void;
+}
 
 const games = [
   { name: "Resurrecting Riches", image: resurrectingRiches },

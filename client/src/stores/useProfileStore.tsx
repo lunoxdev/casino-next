@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { useAuthStore } from "./useAuthStore";
 import axios from "../api/api";
-import { type ProfileState } from "./../types/profile";
+import { type ProfileState } from "../types/profile";
 
 const initialProfileState = {
   nickname: "",

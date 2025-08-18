@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
-import { type AuthState } from "./../types/auth";
+import { type AuthState } from "../types/auth";
 
 const initialAuthState = {
   uuid: "",

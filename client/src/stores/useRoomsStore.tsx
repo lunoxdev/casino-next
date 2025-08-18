@@ -1,6 +1,24 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { type RoomState } from "./../types/room";
+import { type Player, type Room } from "../types/room";
+
+export interface RoomState {
+  myRoom: {
+    roomId: string | null;
+    gameName: string | null;
+    roomPlayers: Player[];
+  };
+  availableRooms: Room[];
+
+  // Setters
+  setMyRoom: (roomId: string, gameName: string, roomPlayers: Player[]) => void;
+  setRoomId: (roomId: string) => void;
+  setRoomPlayers: (roomPlayers: Player[]) => void;
+  setAvailableRooms: (rooms: Room[]) => void;
+
+  // Reset
+  clearRoom: () => void;
+}
 
 const initialRoomsState = {
   myRoom: {
@@ -8,7 +26,6 @@ const initialRoomsState = {
     gameName: null,
     roomPlayers: [],
   },
-
   availableRooms: [],
 };
 
@@ -18,7 +35,6 @@ export const useRoomsStore = create<RoomState>()(
       (set) => ({
         ...initialRoomsState,
 
-        // Setters
         setMyRoom: (roomId, gameName, roomPlayers) =>
           set({ myRoom: { roomId, gameName, roomPlayers } }),
 
@@ -34,7 +50,6 @@ export const useRoomsStore = create<RoomState>()(
 
         setAvailableRooms: (rooms) => set({ availableRooms: rooms }),
 
-        // Reset
         clearRoom: () => {
           set(initialRoomsState, false, "clearRoom");
           localStorage.removeItem("__rooms");
