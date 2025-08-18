@@ -1,8 +1,14 @@
 import { useState } from "react";
 import avatar from "../../assets/avatar.webp";
 import ModalLogOut from "../common/modal/ModalLogOut";
+import { type ProfileHeader } from "../../types/room";
 
-const ProfileHeader = ({ nickname, balance, players, handleLogOut }) => {
+const ProfileHeader = ({
+  nickname,
+  balance,
+  players,
+  handleLogOut,
+}: ProfileHeader) => {
   const [showLogOut, setShowLogOut] = useState(false);
 
   const handleAvatarClick = () => {

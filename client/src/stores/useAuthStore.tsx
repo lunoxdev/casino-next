@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import axios from "../api/api";
+import { type AuthState } from "./../types/auth";
 
 const initialAuthState = {
   uuid: "",
@@ -8,18 +9,20 @@ const initialAuthState = {
   loggedIn: false,
 };
 
-export const useAuthStore = create(
+export const useAuthStore = create<AuthState>()(
   devtools(
     persist(
       (set) => ({
         ...initialAuthState,
 
-        login: async (nickname) => {
+        login: async (nickname: string) => {
           try {
             const res = await axios.post("/api/playerAuth/login", { nickname });
             const { uuid, token } = res.data;
             set({ uuid, token, loggedIn: true });
-          } catch (err) {
+
+            // TODO: Improve error handling and avoid any
+          } catch (err: any) {
             if (err.response?.status === 404) {
               throw new Error("⚠️ Nickname not found");
             }
@@ -37,7 +40,9 @@ export const useAuthStore = create(
             });
             const { uuid, token } = res.data;
             set({ uuid, token, loggedIn: true });
-          } catch (err) {
+
+            // TODO: Improve error handling and avoid any
+          } catch (err: any) {
             if (err.response?.status === 409) {
               throw new Error("⚠️ Nickname already taken");
             }
@@ -50,6 +55,8 @@ export const useAuthStore = create(
             const res = await axios.post("/api/playerAuth/refresh");
             const { token, uuid } = res.data;
             set({ token, uuid, loggedIn: true });
+
+            // TODO: Improve error handling and avoid any
           } catch (err) {
             console.error("Error renewing session:", err);
             set(initialAuthState);

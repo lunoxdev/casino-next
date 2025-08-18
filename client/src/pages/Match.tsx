@@ -24,7 +24,7 @@ const Match = () => {
   const { myRoom } = useRoomsStore();
   const { roomPlayers } = myRoom;
   const location = useLocation();
-  const { gameName } = location.state;
+  const { gameName } = location.state as { gameName: keyof typeof gameUrls };
 
   useEffect(() => {
     if (loggedIn && token) {
@@ -46,7 +46,7 @@ const Match = () => {
       {/* Game iFrame */}
       <iframe
         title="Gate of Olympus"
-        allowFullScreen="false"
+        allowFullScreen={false}
         src={gameUrls[gameName]}
         className="w-[540px] lg:w-[980px] aspect-video mb-1 rounded-sm block"
       />

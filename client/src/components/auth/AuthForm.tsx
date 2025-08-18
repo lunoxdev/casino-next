@@ -36,8 +36,10 @@ const AuthForm = () => {
       } else {
         await register(nickname);
       }
-    } catch (err) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
   };
 

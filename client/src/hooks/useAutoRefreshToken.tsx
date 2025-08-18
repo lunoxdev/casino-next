@@ -4,9 +4,11 @@ import { useAuthStore } from "../stores/useAuthStore";
 
 const REFRESH_OFFSET_MS = 60 * 60 * 1000; // 1 hour before expiration
 
-const getRefreshTime = (token) => {
+const getRefreshTime = (token: string) => {
   try {
     const decoded = jwtDecode(token);
+    if (!decoded.exp) return null;
+
     const exp = decoded.exp * 1000; // convert to ms
     const now = Date.now();
     const refreshTime = exp - now - REFRESH_OFFSET_MS;
@@ -25,7 +27,7 @@ export const useAutoRefreshToken = () => {
     if (!token) return;
 
     const refreshTime = getRefreshTime(token);
-    let timeoutId;
+    let timeoutId: number | undefined;
 
     if (refreshTime === null || refreshTime === 0) {
       refreshAccessToken();

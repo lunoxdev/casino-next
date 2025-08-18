@@ -1,4 +1,9 @@
-const ModalLogOut = ({ onConfirm, onCancel }) => {
+interface ModalLogOutProps {
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+const ModalLogOut: React.FC<ModalLogOutProps> = ({ onConfirm, onCancel }) => {
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center w-full space-x-20 bg-black/50 backdrop-blur">
       <button

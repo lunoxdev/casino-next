@@ -10,12 +10,13 @@ import { useProfileStore } from "../../stores/useProfileStore";
 import { useRoomsStore } from "../../stores/useRoomsStore";
 import { useNavigate } from "react-router-dom";
 import socket from "../../socket";
+import { type Player } from "../../types/room";
 
 const LobbyHome = () => {
   const { uuid, logOut } = useAuthStore.getState();
   const { nickname, balance, fetchProfile, clearProfile } = useProfileStore();
-  const [players, setPlayers] = useState([]);
-  const [profileLoaded, setProfileLoaded] = useState(false);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [profileLoaded, setProfileLoaded] = useState<boolean>(false);
   const { myRoom, availableRooms, setRoomId, clearRoom } = useRoomsStore();
   const { roomId, roomPlayers, gameName } = myRoom;
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const LobbyHome = () => {
     socket.emit("logOut", { uuid });
   };
 
-  const handleCreateRoom = (gameName) => {
+  const handleCreateRoom = (gameName: string) => {
     const newRoomId = crypto.randomUUID();
     socket.emit("createRoom", {
       roomId: newRoomId,
@@ -51,7 +52,7 @@ const LobbyHome = () => {
     setRoomId(newRoomId);
   };
 
-  const handleJoin = (roomIdToJoin) => {
+  const handleJoin = (roomIdToJoin: string) => {
     socket.emit("joinRoom", {
       roomId: roomIdToJoin,
       uuid,
@@ -85,7 +86,7 @@ const LobbyHome = () => {
       <div className="grid grid-cols-2 gap-4 w-full h-44 mx-auto my-2 bg-gradient-to-br from-transparent via-sky-500/5 to-sky-600/0 shadow-sky-950/10 shadow rounded-md px-2">
         {/* Room Panel */}
         <div>
-          {roomId && (
+          {roomId && gameName && (
             <RoomPanel
               gameName={gameName}
               roomPlayers={roomPlayers}
@@ -104,7 +105,7 @@ const LobbyHome = () => {
       </div>
 
       {/* Games List */}
-      <GamesList handleCreateRoom={handleCreateRoom} roomId={roomId} />
+      <GamesList handleCreateRoom={handleCreateRoom} />
     </div>
   );
 };

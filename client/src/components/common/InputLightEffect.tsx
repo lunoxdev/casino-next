@@ -1,13 +1,28 @@
 import { useRef, useState } from "react";
 import clsx from "clsx";
 
-export const InputLightEffect = ({ value, onChange, onEnter }) => {
-  const inputRef = useRef(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [show, setShow] = useState(false);
+interface InputLightEffectProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: () => void;
+}
 
-  const handleMouseMove = (e) => {
+export const InputLightEffect = ({
+  value,
+  onChange,
+  onEnter,
+}: InputLightEffectProps) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const [show, setShow] = useState<boolean>(false);
+
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ) => {
     if (!inputRef.current || isFocused) return;
     const rect = inputRef.current.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -25,7 +40,10 @@ export const InputLightEffect = ({ value, onChange, onEnter }) => {
 
   const handleMouseEnter = () => setShow(true);
   const handleMouseLeave = () => !isFocused && setShow(false);
-  const handleKeyDown = (e) => e.key === "Enter" && onEnter?.();
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") onEnter?.();
+  };
 
   return (
     <div className="relative w-full mb-3">
@@ -70,15 +88,15 @@ export const InputLightEffect = ({ value, onChange, onEnter }) => {
         style={{
           WebkitMaskImage:
             "radial-gradient(circle at top left, black 6px, transparent 7px), \
-         radial-gradient(circle at top right, black 6px, transparent 7px), \
-         radial-gradient(circle at bottom left, black 6px, transparent 7px), \
-         radial-gradient(circle at bottom right, black 6px, transparent 7px)",
+             radial-gradient(circle at top right, black 6px, transparent 7px), \
+             radial-gradient(circle at bottom left, black 6px, transparent 7px), \
+             radial-gradient(circle at bottom right, black 6px, transparent 7px)",
           WebkitMaskComposite: "destination-in",
           maskImage:
             "radial-gradient(circle at top left, black 6px, transparent 7px), \
-         radial-gradient(circle at top right, black 6px, transparent 7px), \
-         radial-gradient(circle at bottom left, black 6px, transparent 7px), \
-         radial-gradient(circle at bottom right, black 6px, transparent 7px)",
+             radial-gradient(circle at top right, black 6px, transparent 7px), \
+             radial-gradient(circle at bottom left, black 6px, transparent 7px), \
+             radial-gradient(circle at bottom right, black 6px, transparent 7px)",
           maskComposite: "add",
         }}
       />

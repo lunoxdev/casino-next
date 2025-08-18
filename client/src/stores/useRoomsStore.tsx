@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { type RoomState } from "./../types/room";
 
 const initialRoomsState = {
   myRoom: {
@@ -11,7 +12,7 @@ const initialRoomsState = {
   availableRooms: [],
 };
 
-export const useRoomsStore = create(
+export const useRoomsStore = create<RoomState>()(
   devtools(
     persist(
       (set) => ({

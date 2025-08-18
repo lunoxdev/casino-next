@@ -1,11 +1,12 @@
 import clsx from "clsx";
+import { type RoomPanel } from "../../types/room";
 
 const RoomPanel = ({
   gameName,
   roomPlayers,
   handleStartMatch,
   handleLeave,
-}) => {
+}: RoomPanel) => {
   const isDisabled = roomPlayers.length <= 1;
 
   return (

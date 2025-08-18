@@ -1,10 +1,10 @@
 import { useRef } from "react";
-
 import resurrectingRiches from "../../assets/games/mp4/resurrecting-riches.mp4";
 import gatesOfOlympus from "../../assets/games/mp4/gates-of-olympus-1000.mp4";
 import sugarRush from "../../assets/games/mp4/sugar-rush-1000.mp4";
 import wantedDeadOrWild from "../../assets/games/mp4/wanted-dead-or-a-wild.mp4";
 import witchHeart from "../../assets/games/mp4/witch-heart.mp4";
+import { type GameList } from "../../types/room";
 
 const games = [
   { name: "Resurrecting Riches", image: resurrectingRiches },
@@ -14,10 +14,10 @@ const games = [
   { name: "Witch Heart", image: witchHeart },
 ];
 
-const GamesList = ({ handleCreateRoom }) => {
-  const videoRefs = useRef([]);
+const GamesList = ({ handleCreateRoom }: GameList) => {
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  const handleHover = (hoveredIndex) => {
+  const handleHover = (hoveredIndex: number) => {
     videoRefs.current.forEach((video, index) => {
       if (!video) return;
       if (index === hoveredIndex) {
@@ -35,7 +35,7 @@ const GamesList = ({ handleCreateRoom }) => {
     });
   };
 
-  const handleClick = (gameName) => {
+  const handleClick = (gameName: string) => {
     handleCreateRoom(gameName);
   };
 
@@ -50,7 +50,9 @@ const GamesList = ({ handleCreateRoom }) => {
           onClick={() => handleClick(game.name)}
         >
           <video
-            ref={(el) => (videoRefs.current[index] = el)}
+            ref={(el) => {
+              videoRefs.current[index] = el;
+            }}
             src={game.image}
             autoPlay
             muted

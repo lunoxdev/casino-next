@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { useAuthStore } from "./useAuthStore";
 import axios from "../api/api";
+import { type ProfileState } from "./../types/profile";
 
 const initialProfileState = {
   nickname: "",
@@ -9,7 +10,7 @@ const initialProfileState = {
   uuid: "",
 };
 
-export const useProfileStore = create(
+export const useProfileStore = create<ProfileState>()(
   devtools(
     persist(
       (set) => ({
