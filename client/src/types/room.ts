@@ -4,9 +4,9 @@ export interface Player {
 }
 
 export interface Room {
-  roomId: string | null;
+  roomId: string;
   gameName: string | null;
-  roomPlayers: Player[];
+  players: Player[];
   host: Player;
 }
 
