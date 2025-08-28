@@ -18,9 +18,7 @@
     "target": "esnext",
     "lib": ["esnext", "dom"],
     "moduleResolution": "bundler",
-    "types": ["vite/client"],
 
-    /* Salida (Vite ya maneja el bundling, no necesitas rootDir/outDir) */
     "sourceMap": true,
     "declaration": false,
 
