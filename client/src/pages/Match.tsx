@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuthStore } from "../stores/useAuthStore";
 import { useProfileStore } from "../stores/useProfileStore";
-import { useRoomsStore } from "../stores/useRoomsStore";
 import socket from "../socket";
 
 const gameUrls = {
@@ -21,8 +20,6 @@ const gameUrls = {
 const Match = () => {
   const { token, loggedIn } = useAuthStore();
   const { nickname, balance } = useProfileStore();
-  const { myRoom } = useRoomsStore();
-  const { roomPlayers } = myRoom;
   const location = useLocation();
   const { gameName } = location.state as { gameName: keyof typeof gameUrls };
 
@@ -34,59 +31,14 @@ const Match = () => {
   }, [loggedIn, token, nickname, balance]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <h1 className="text-xl lg:text-4xl mb-2">
-        ⚔{" "}
-        <span className="bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text">
-          {gameName}
-        </span>{" "}
-        ⚔
-      </h1>
-
+    <div className="flex items-center justify-center h-full">
       {/* Game iFrame */}
       <iframe
         title="Gate of Olympus"
         allowFullScreen={false}
         src={gameUrls[gameName]}
-        className="w-[540px] lg:w-[980px] aspect-video mb-1 rounded-sm block"
+        className="w-[600px] lg:w-[1280px] aspect-video rounded-sm"
       />
-
-      <div className="grid grid-cols-3 gap-4 items-center text-center text-white text-lg font-semibold">
-        {/* Player */}
-        <div>
-          {roomPlayers && roomPlayers[0] ? (
-            <>
-              <p className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 inline-block text-transparent bg-clip-text">
-                {roomPlayers[0].nickname}
-              </p>
-              <p className="text-sm lg:text-xl">💰 $1000</p>
-            </>
-          ) : (
-            <p>Waiting for you...</p>
-          )}
-        </div>
-
-        {/* VS Text */}
-        <div>
-          <p className="text-2xl bg-gradient-to-r from-gray-500 via-gray-300 to-gray-500 inline-block text-transparent bg-clip-text">
-            VS
-          </p>
-        </div>
-
-        {/* Player 2 */}
-        <div>
-          {roomPlayers && roomPlayers[1] ? (
-            <>
-              <p className="bg-gradient-to-r from-rose-500 via-rose-400 to-rose-500 inline-block text-transparent bg-clip-text">
-                {roomPlayers[1].nickname}
-              </p>
-              <p className="text-sm lg:text-xl">💰 $1000</p>
-            </>
-          ) : (
-            <p>Waiting for opponent...</p>
-          )}
-        </div>
-      </div>
     </div>
   );
 };
