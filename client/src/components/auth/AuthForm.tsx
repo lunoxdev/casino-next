@@ -45,7 +45,7 @@ const AuthForm = () => {
 
   return (
     <section className="flex flex-col items-center justify-center h-full">
-      <h1 className="text-4xl mb-4 bg-gradient-to-r from-white via-sky-300 to-sky-600 inline-block text-transparent bg-clip-text">
+      <h1 className="text-4xl mb-10 bg-gradient-to-r from-white via-sky-300 to-sky-600 inline-block text-transparent bg-clip-text">
         Welcome
       </h1>
 
@@ -62,7 +62,7 @@ const AuthForm = () => {
         disabled={!nickname}
         onClick={handleSubmit}
         className={clsx(
-          "bg-linear-to-r from-sky-600 to-sky-700 px-4 py-1 rounded transition mb-5 mt-6",
+          "bg-linear-to-r from-sky-600 to-sky-700 px-4 py-1 rounded transition mb-5 mt-2",
           !nickname
             ? "opacity-50 cursor-not-allowed"
             : "cursor-pointer hover:opacity-80"
@@ -72,9 +72,13 @@ const AuthForm = () => {
       </button>
 
       <span> - or - </span>
-
       <button
-        className="cursor-pointer bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:w-full after:origin-bottom after:scale-x-0 after:bg-sky-500 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom hover:after:scale-x-100 mt-5"
+        className="cursor-pointer underline-offset-4 bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 inline-block text-transparent bg-clip-text relative
+  after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:w-full 
+  after:origin-bottom after:scale-x-0 
+  after:bg-gradient-to-r after:from-transparent after:via-sky-500 after:to-transparent 
+  after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] 
+  hover:after:origin-bottom hover:after:scale-x-100 mt-5"
         onClick={() => setMode(mode === "login" ? "register" : "login")}
       >
         {mode === "login" ? "Register" : "Log in"}

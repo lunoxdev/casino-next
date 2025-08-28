@@ -46,7 +46,7 @@ export const InputLightEffect = ({
   };
 
   return (
-    <div className="relative w-full mb-3">
+    <div className="relative w-full mb-2">
       <input
         ref={inputRef}
         value={value}
@@ -62,7 +62,7 @@ export const InputLightEffect = ({
         type="text"
         name="nickname"
         maxLength={12}
-        className="h-10 w-full rounded-md bg-black/0 px-4 text-xs sm:text-base text-center text-cyan-100 placeholder:text-cyan-100/50 transition-colors duration-300 focus:border-cyan-900 focus:outline-cyan-900 outline-none"
+        className="h-10 w-full rounded-md bg-black/0 px-4 text-xs sm:text-base text-center text-cyan-100 placeholder:text-cyan-100/50 transition-colors duration-300 focus:border-cyan-900 focus:outline-cyan-900 outline-none border border-cyan-500/10"
       />
 
       {/* Hover effect */}
