@@ -33,6 +33,7 @@ const OrientationOverlay = () => {
         src="/rotate-phone.lottie"
         loop
         autoplay
+        speed={2}
         className="w-full h-auto"
       />
       <p className="text-sm sm:text-xl font-bold px-4 animate-pulse">
