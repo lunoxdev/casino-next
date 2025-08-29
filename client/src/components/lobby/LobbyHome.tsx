@@ -74,7 +74,7 @@ const LobbyHome = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between lg:justify-center w-4xl lg:w-3xl h-full">
+    <div className="flex flex-col justify-between lg:justify-center w-full lg:w-3xl h-full">
       {/* Profile Header */}
       <ProfileHeader
         nickname={nickname}
