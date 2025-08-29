@@ -34,7 +34,7 @@ const OrientationOverlay = () => {
         loop
         autoplay
         speed={2}
-        className="w-full h-auto"
+        className="w-full h-auto transform scale-x-[-1]"
       />
       <p className="text-sm sm:text-xl font-bold px-4 animate-pulse">
         Rotate your phone for better experience
